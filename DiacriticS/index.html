@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DiacriticS — Contamination-Controlled Arabic Diacritisation</title>
+<meta name="description" content="DiacriticS: fine-tuning open language models for robust Arabic text diacritisation, benchmarked on the contamination-controlled SadeedDiac-25 test set.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Source+Serif+4:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="grain"></div>
+
+<nav class="nav">
+  <div class="nav__mark">
+    <span class="nav__glyph" aria-hidden="true">تش</span>
+    <span data-en="DiacriticS" data-ar="داياكريتِكس">DiacriticS</span>
+  </div>
+  <div class="nav__links">
+    <a href="#idea" data-en="The Idea" data-ar="الفكرة">The Idea</a>
+    <a href="#pipeline" data-en="Pipeline" data-ar="آلية العمل">Pipeline</a>
+    <a href="#results" data-en="Results" data-ar="النتائج">Results</a>
+    <a href="#references" data-en="References" data-ar="المراجع">References</a>
+  </div>
+  <button class="lang-toggle" id="langToggle" aria-label="Switch language">
+    <span class="lang-toggle__en">EN</span>
+    <span class="lang-toggle__sep">/</span>
+    <span class="lang-toggle__ar">ع</span>
+  </button>
+</nav>
+
+<header class="hero">
+  <div class="hero__inner">
+    <p class="hero__eyebrow" data-en="KAUST Academy · KAUST · IAU · KFUPM" data-ar="أكاديمية كاوست · كاوست · جامعة الإمام عبدالرحمن · جامعة الملك فهد">KAUST Academy · KAUST · IAU · KFUPM</p>
+
+    <div class="hero__glyph-stage" aria-hidden="true">
+      <svg viewBox="0 0 520 220" class="hero__svg">
+        <text id="skeleton" x="260" y="140" text-anchor="middle" class="hero__word">تشكيل</text>
+        <text id="marks" x="260" y="140" text-anchor="middle" class="hero__word hero__marks">تَشْكِيل</text>
+      </svg>
+      <p class="hero__caption" data-en="tashkīl — the marks that carry the meaning" data-ar="تشكيل — العلامات التي تحمل المعنى">tashkīl — the marks that carry the meaning</p>
+    </div>
+
+    <h1 class="hero__title">
+      <span data-en="DiacriticS" data-ar="داياكريتِكس">DiacriticS</span>
+    </h1>
+    <p class="hero__subtitle"
+       data-en="Fine-tuning an open language model to restore Arabic's missing vowels — evaluated where it counts: on a benchmark built to resist memorisation."
+       data-ar="ضبط دقيق لنموذج لغوي مفتوح لاستعادة الحركات العربية المفقودة — بتقييم صارم على معيار صُمم ليقاوم الحفظ والتلوث.">
+      Fine-tuning an open language model to restore Arabic's missing vowels — evaluated where it counts: on a benchmark built to resist memorisation.
+    </p>
+    <a href="#idea" class="hero__cta" data-en="Read the project ↓" data-ar="اقرأ عن المشروع ↓">Read the project ↓</a>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ THE IDEA ============ -->
+  <section id="idea" class="section idea">
+    <div class="section__head">
+      <p class="eyebrow" data-en="01 — Comprehension" data-ar="٠١ — الفكرة">01 — Comprehension</p>
+      <h2 data-en="One skeleton, many meanings" data-ar="هيكل واحد، معانٍ كثيرة">One skeleton, many meanings</h2>
+    </div>
+
+    <div class="idea__grid">
+      <p class="idea__lede"
+         data-en="Written Arabic is usually published bare: consonants and long vowels only, with the short vowels and grammatical case endings — the diacritics, or tashkeel — left out. A single skeleton of letters can hide several unrelated words."
+         data-ar="تُنشر العربية غالبًا بلا حركات: الحروف الساكنة والحروف المدّية فقط، بينما تُحذف الحركات القصيرة وعلامات الإعراب. هيكل واحد من الحروف قد يخفي كلمات مختلفة تمامًا في المعنى.">
+        Written Arabic is usually published bare: consonants and long vowels only, with the short vowels and grammatical case endings — the diacritics, or tashkeel — left out. A single skeleton of letters can hide several unrelated words.
+      </p>
+
+      <div class="ambiguity-card">
+        <p class="ambiguity-card__label" data-en="Same three letters, ع ل م" data-ar="نفس الحروف الثلاثة: ع ل م">Same three letters, ع ل م</p>
+        <div class="ambiguity-row">
+          <span class="ar" dir="rtl">عَلَمٌ</span>
+          <span class="gloss" data-en="a flag" data-ar="عَلَم">a flag</span>
+        </div>
+        <div class="ambiguity-row">
+          <span class="ar" dir="rtl">عِلْمٌ</span>
+          <span class="gloss" data-en="knowledge" data-ar="عِلْم">knowledge</span>
+        </div>
+        <div class="ambiguity-row">
+          <span class="ar" dir="rtl">عَلَّمَ</span>
+          <span class="gloss" data-en="he taught" data-ar="فِعل التعليم">he taught</span>
+        </div>
+        <p class="ambiguity-card__foot"
+           data-en="Three readings. Zero difference on the page without diacritics."
+           data-ar="ثلاث قراءات مختلفة، ولا فرق بينها على الصفحة دون الحركات.">
+          Three readings. Zero difference on the page without diacritics.
+        </p>
+      </div>
+    </div>
+
+    <div class="idea__why">
+      <div class="why-item">
+        <h3 data-en="Why it matters" data-ar="لماذا يهمّ">Why it matters</h3>
+        <p data-en="Diacritisation is preprocessing for text-to-speech, machine translation, and information extraction — systems that need one unambiguous pronunciation, not a lattice of possibilities."
+           data-ar="التشكيل خطوة تمهيدية لأنظمة تحويل النص إلى كلام، والترجمة الآلية، واستخراج المعلومات — أنظمة تحتاج نطقًا واحدًا واضحًا لا شبكة من الاحتمالات.">
+          Diacritisation is preprocessing for text-to-speech, machine translation, and information extraction — systems that need one unambiguous pronunciation, not a lattice of possibilities.
+        </p>
+      </div>
+      <div class="why-item">
+        <h3 data-en="Why it's hard to benchmark" data-ar="لماذا يصعب قياسه بعدالة">Why it's hard to benchmark</h3>
+        <p data-en="Prior benchmarks leaked: training and test sets overlapped, and evaluations skewed toward either Classical or Modern Standard Arabic, inflating reported accuracy."
+           data-ar="المعايير السابقة كانت تعاني من تسرّب البيانات: تداخل بين بيانات التدريب والاختبار، وميل نحو الفصحى التراثية أو المعاصرة فقط، مما ضخّم دقّة النتائج المُعلنة.">
+          Prior benchmarks leaked: training and test sets overlapped, and evaluations skewed toward either Classical or Modern Standard Arabic, inflating reported accuracy.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PIPELINE ============ -->
+  <section id="pipeline" class="section pipeline">
+    <div class="section__head">
+      <p class="eyebrow" data-en="02 — Method" data-ar="٠٢ — المنهجية">02 — Method</p>
+      <h2 data-en="How the project works" data-ar="كيف يعمل المشروع">How the project works</h2>
+      <p class="section__intro"
+         data-en="A strict wall between what the model learns from and what it is judged on. Five stages, run in order."
+         data-ar="فاصل صارم بين ما يتعلّم منه النموذج وما يُقيَّم عليه. خمس مراحل متسلسلة.">
+        A strict wall between what the model learns from and what it is judged on. Five stages, run in order.
+      </p>
+    </div>
+
+    <ol class="steps">
+      <li class="step">
+        <span class="step__n">01</span>
+        <h3 data-en="Curate the training corpus" data-ar="تجهيز بيانات التدريب">Curate the training corpus</h3>
+        <p data-en="The Tashkeela corpus is cleaned in multiple passes: duplicates removed, missing initial diacritics corrected, Alif-Lam shadda/sukun markers standardised, non-standard characters stripped. Result: roughly 1 million diacritised examples, ~53 million words."
+           data-ar="تنظيف بيانات تشكيلة عبر مراحل متعددة: إزالة التكرار، وتصحيح الحركات الأولى الناقصة، وتوحيد علامات الشدة والسكون على أل التعريف، وحذف الرموز غير القياسية. الناتج: نحو مليون مثال مُشكَّل بما يعادل ٥٣ مليون كلمة.">
+          The Tashkeela corpus is cleaned in multiple passes: duplicates removed, missing initial diacritics corrected, Alif-Lam shadda/sukun markers standardised, non-standard characters stripped. Result: roughly 1 million diacritised examples, ~53 million words.
+        </p>
+      </li>
+      <li class="step">
+        <span class="step__n">02</span>
+        <h3 data-en="Adopt a contamination-controlled test set" data-ar="اعتماد معيار اختبار خالٍ من التلوث">Adopt a contamination-controlled test set</h3>
+        <p data-en="SadeedDiac-25 holds 1,200 human-reviewed paragraphs, split evenly between Modern Standard and Classical Arabic across news, sports, politics, religion, and literature — with zero overlap against training corpora."
+           data-ar="يضم معيار SadeedDiac-25 ألف ومئتي فقرة راجعها خبراء، موزّعة بالتساوي بين الفصحى المعاصرة والعربية التراثية عبر مجالات الأخبار والرياضة والسياسة والدين والأدب، دون أي تداخل مع بيانات التدريب.">
+          SadeedDiac-25 holds 1,200 human-reviewed paragraphs, split evenly between Modern Standard and Classical Arabic across news, sports, politics, religion, and literature — with zero overlap against training corpora.
+        </p>
+      </li>
+      <li class="step">
+        <span class="step__n">03</span>
+        <h3 data-en="Benchmark zero-shot, across scales" data-ar="قياس الأداء دون تدريب عبر أحجام مختلفة">Benchmark zero-shot, across scales</h3>
+        <p data-en="Eight open-weights models are scored cold, grouped into three tiers by parameter count, before any fine-tuning happens — establishing an honest baseline."
+           data-ar="يُقيَّم ثمانية نماذج مفتوحة الوزن دون أي تدريب مسبق، مقسّمة إلى ثلاث فئات حسب عدد المعاملات، لبناء خط أساس صادق قبل أي ضبط دقيق.">
+          Eight open-weights models are scored cold, grouped into three tiers by parameter count, before any fine-tuning happens — establishing an honest baseline.
+        </p>
+      </li>
+      <li class="step">
+        <span class="step__n">04</span>
+        <h3 data-en="Fine-tune with LoRA / QLoRA" data-ar="ضبط دقيق باستخدام LoRA / QLoRA">Fine-tune with LoRA / QLoRA</h3>
+        <p data-en="The strongest candidate model is adapted on the cleaned Tashkeela set using parameter-efficient fine-tuning, rather than full-weight retraining."
+           data-ar="يُكيَّف أفضل نموذج مرشّح على بيانات تشكيلة المنظّفة باستخدام تقنيات ضبط دقيق قليلة المعاملات، بدل إعادة تدريب كامل الأوزان.">
+          The strongest candidate model is adapted on the cleaned Tashkeela set using parameter-efficient fine-tuning, rather than full-weight retraining.
+        </p>
+      </li>
+      <li class="step">
+        <span class="step__n">05</span>
+        <h3 data-en="Score, then break the score apart" data-ar="القياس ثم تحليل مصادر الخطأ">Score, then break the score apart</h3>
+        <p data-en="Diacritic and Word Error Rates are computed with and without sentence-final case endings, then compared across Classical vs. Modern Standard subsets to isolate where errors come from."
+           data-ar="تُحسب معدلات خطأ الحركات والكلمات مع علامات الإعراب النهائية وبدونها، ثم تُقارن بين نصوص الفصحى التراثية والمعاصرة لتحديد مصدر الأخطاء.">
+          Diacritic and Word Error Rates are computed with and without sentence-final case endings, then compared across Classical vs. Modern Standard subsets to isolate where errors come from.
+        </p>
+      </li>
+    </ol>
+
+    <div class="formula-block">
+      <p class="formula-block__label" data-en="The two headline metrics" data-ar="مقياسان رئيسيان">The two headline metrics</p>
+      <div class="formula">
+        <span class="formula__name">DER</span>
+        <span class="formula__eq" data-en="= incorrect diacritics / total diacritised characters × 100" data-ar="= الحركات الخاطئة ÷ إجمالي الحروف المُشكَّلة × ١٠٠">= incorrect diacritics / total diacritised characters × 100</span>
+      </div>
+      <div class="formula">
+        <span class="formula__name">WER</span>
+        <span class="formula__eq" data-en="= words with ≥1 diacritic error / total words × 100" data-ar="= الكلمات التي بها خطأ حركة واحد فأكثر ÷ إجمالي الكلمات × ١٠٠">= words with ≥1 diacritic error / total words × 100</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RESULTS ============ -->
+  <section id="results" class="section results">
+    <div class="section__head">
+      <p class="eyebrow" data-en="03 — Baseline findings" data-ar="٠٣ — نتائج خط الأساس">03 — Baseline findings</p>
+      <h2 data-en="Results on SadeedDiac-25" data-ar="النتائج على معيار SadeedDiac-25">Results on SadeedDiac-25</h2>
+      <p class="section__intro"
+         data-en="Zero-shot scores across eight open-weights models, before fine-tuning. Two patterns dominate every tier."
+         data-ar="نتائج دون تدريب مسبق لثمانية نماذج مفتوحة، قبل الضبط الدقيق. نمطان يتكرران في كل الفئات.">
+        Zero-shot scores across eight open-weights models, before fine-tuning. Two patterns dominate every tier.
+      </p>
+    </div>
+
+    <div class="tiers">
+      <div class="tier-card">
+        <p class="tier-card__range">&lt; 500M</p>
+        <h3 data-en="Small models" data-ar="نماذج صغيرة">Small models</h3>
+        <ul class="model-list">
+          <li>byt5-arabic-diacritization</li>
+          <li>arabic-tashkeel-flan-t5-small</li>
+          <li>Fine-Tashkeel</li>
+          <li>Tashkeel-350M-v2</li>
+        </ul>
+        <p class="tier-card__note" data-en="Task-built, structurally stable." data-ar="مُصمَّمة للمهمة، ومستقرة هيكليًا.">Task-built, structurally stable.</p>
+      </div>
+      <div class="tier-card">
+        <p class="tier-card__range">500M – 1B</p>
+        <h3 data-en="Medium models" data-ar="نماذج متوسطة">Medium models</h3>
+        <ul class="model-list">
+          <li>Qwen3.5-0.8B</li>
+          <li>gemma-3-1b-pt-10k-diacritization</li>
+        </ul>
+        <p class="tier-card__note" data-en="General-purpose, task-adapted." data-ar="عامة الغرض، مُكيَّفة للمهمة.">General-purpose, task-adapted.</p>
+      </div>
+      <div class="tier-card">
+        <p class="tier-card__range">&gt; 1B</p>
+        <h3 data-en="Large models" data-ar="نماذج كبيرة">Large models</h3>
+        <ul class="model-list">
+          <li>Fanar-1-9B-Instruct</li>
+          <li>aya-expanse-8b</li>
+          <li>Moonlight-16B-A3B-Instruct</li>
+        </ul>
+        <p class="tier-card__note" data-en="Instruction-tuned, general LLMs." data-ar="نماذج لغوية عامة مضبوطة بالتعليمات.">Instruction-tuned, general LLMs.</p>
+      </div>
+    </div>
+
+    <div class="findings">
+      <div class="finding-card">
+        <span class="finding-card__tag" data-en="Finding 1" data-ar="النتيجة الأولى">Finding 1</span>
+        <h3 data-en="Sentence endings are the weak point" data-ar="نهايات الجمل هي نقطة الضعف">Sentence endings are the weak point</h3>
+        <p data-en="Every model's error rate jumps on the last, case-marking diacritic of a sentence (i'rab) compared to diacritics inside a word — the clearest sign that these models resolve local spelling far better than sentence-level syntax."
+           data-ar="يرتفع معدّل الخطأ لدى جميع النماذج عند الحركة الأخيرة الدالة على الإعراب مقارنة بحركات داخل الكلمة — أوضح دليل على أن هذه النماذج تتقن التهجئة المحلية أكثر من تحليل التركيب النحوي للجملة كاملة.">
+          Every model's error rate jumps on the last, case-marking diacritic of a sentence (i'rab) compared to diacritics inside a word — the clearest sign that these models resolve local spelling far better than sentence-level syntax.
+        </p>
+        <div class="finding-example">
+          <span class="ar" dir="rtl">قَرَأَ الطَّالِبُ الكِتَابَ</span>
+          <span class="gloss" data-en="'the student' — ُ nominative — reads correctly inside the word, breaks at the case ending" data-ar="«الطالبُ» — الضمة الإعرابية هي أكثر ما يخطئ فيه النموذج">'the student' — ُ nominative — reads correctly inside the word, breaks at the case ending</span>
+        </div>
+      </div>
+      <div class="finding-card">
+        <span class="finding-card__tag" data-en="Finding 2" data-ar="النتيجة الثانية">Finding 2</span>
+        <h3 data-en="Classical Arabic is the harder domain" data-ar="العربية التراثية هي المجال الأصعب">Classical Arabic is the harder domain</h3>
+        <p data-en="Error rates rise markedly moving from Modern Standard Arabic passages to Classical Arabic (CA) texts — evidence that domain-balanced training, not just more data, is what closes the gap."
+           data-ar="ترتفع معدّلات الخطأ بشكل ملحوظ عند الانتقال من نصوص الفصحى المعاصرة إلى نصوص العربية التراثية — دليل على أن التوازن بين المجالات في بيانات التدريب، لا مجرد زيادة حجمها، هو ما يُضيّق الفجوة.">
+          Error rates rise markedly moving from Modern Standard Arabic passages to Classical Arabic (CA) texts — evidence that domain-balanced training, not just more data, is what closes the gap.
+        </p>
+        <div class="finding-example">
+          <span class="ar" dir="rtl">وَقَالَ الرَّاوِي فِي إِسْنَادِهِ</span>
+          <span class="gloss" data-en="dense classical narration syntax — the CA register with the highest observed error" data-ar="تركيب سردي تراثي كثيف — من أعلى النصوص خطأً في العربية التراثية">dense classical narration syntax — the CA register with the highest observed error</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ REFERENCES ============ -->
+  <section id="references" class="section references">
+    <div class="section__head">
+      <p class="eyebrow" data-en="04 — Grounding" data-ar="٠٤ — المصادر">04 — Grounding</p>
+      <h2 data-en="References" data-ar="المراجع">References</h2>
+    </div>
+
+    <div class="ref-grid">
+      <div class="ref-card">
+        <span class="ref-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 4.5C4 3.67 4.67 3 5.5 3H12V21H5.5C4.67 21 4 20.33 4 19.5V4.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M20 4.5C20 3.67 19.33 3 18.5 3H12V21H18.5C19.33 21 20 20.33 20 19.5V4.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </span>
+        <p class="ref-card__title">Character-based Arabic Tashkeel Transformer (CATT)</p>
+        <p class="ref-card__meta">A. Abbad et al. · github.com/abjadai/catt · 2023</p>
+      </div>
+      <div class="ref-card">
+        <span class="ref-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 4.5C4 3.67 4.67 3 5.5 3H12V21H5.5C4.67 21 4 20.33 4 19.5V4.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M20 4.5C20 3.67 19.33 3 18.5 3H12V21H18.5C19.33 21 20 20.33 20 19.5V4.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </span>
+        <p class="ref-card__title">Token Classification Is All You Need for Arabic Diacritisation</p>
+        <p class="ref-card__meta">F. Author et al. · 2024</p>
+      </div>
+      <div class="ref-card">
+        <span class="ref-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 4.5C4 3.67 4.67 3 5.5 3H12V21H5.5C4.67 21 4 20.33 4 19.5V4.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M20 4.5C20 3.67 19.33 3 18.5 3H12V21H18.5C19.33 21 20 20.33 20 19.5V4.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </span>
+        <p class="ref-card__title">Sadeed: A Contamination-Controlled Benchmark and Task-Specific SLM for Arabic Diacritisation</p>
+        <p class="ref-card__meta">S. Author et al. · 2025</p>
+      </div>
+      <div class="ref-card">
+        <span class="ref-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 4.5C4 3.67 4.67 3 5.5 3H12V21H5.5C4.67 21 4 20.33 4 19.5V4.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M20 4.5C20 3.67 19.33 3 18.5 3H12V21H18.5C19.33 21 20 20.33 20 19.5V4.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </span>
+        <p class="ref-card__title">AraXLM: Evaluating Arabic Diacritization Tools for Cross-Language Plagiarism Detection</p>
+        <p class="ref-card__meta">M. Author et al. · 2024</p>
+      </div>
+      <div class="ref-card">
+        <span class="ref-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 4.5C4 3.67 4.67 3 5.5 3H12V21H5.5C4.67 21 4 20.33 4 19.5V4.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M20 4.5C20 3.67 19.33 3 18.5 3H12V21H18.5C19.33 21 20 20.33 20 19.5V4.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </span>
+        <p class="ref-card__title">More Data, Fewer Diacritics: Scaling Arabic TTS</p>
+        <p class="ref-card__meta">T. Author et al. · 2024</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p data-en="DiacriticS — a KAUST Academy research project on contamination-controlled Arabic diacritisation."
+     data-ar="داياكريتِكس — مشروع بحثي من أكاديمية كاوست حول التشكيل العربي بمعايير خالية من التلوث.">
+    DiacriticS — a KAUST Academy research project on contamination-controlled Arabic diacritisation.
+  </p>
+  <p class="footer__authors">Youssef S. Mohamed (KAUST) · Mahdi Alkhamis (IAU) · Mohammad Alali (KFUPM)</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
