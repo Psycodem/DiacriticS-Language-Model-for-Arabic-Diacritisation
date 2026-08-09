@@ -72,6 +72,7 @@ Both metrics are reported with and without Case Endings (CE) calculations.
 | [Youssef S. Mohamed](https://mo-youssef.github.io/) | Mentor | KAUST |
 | [Mahdi Alkhamis](https://linktr.ee/psycodem) | AI/ML Student | IAU |
 | [Mohammad Alali](https://www.linkedin.com/in/mohammad-alali-9b992135a/) | Software Engineering Student | KFUPM |
+| [Saad Alnafjan](https://www.linkedin.com/in/saadtalnafjan/) | Electrical Engineering Student | KAU |
 
 ## References
 
