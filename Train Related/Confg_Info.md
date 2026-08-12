@@ -27,7 +27,7 @@ RESPONSE_TEMPLATE = "<|im_start|>assistant\n"  # verify against tokenizer.chat_t
 
 COMMON_TRAINING_ARGS = dict(
     output_dir=OUTPUT_DIR,
-    num_train_epochs=3,
+    num_train_epochs=6,
     per_device_eval_batch_size=2,
     lr_scheduler_type="cosine",
     warmup_steps=30,
