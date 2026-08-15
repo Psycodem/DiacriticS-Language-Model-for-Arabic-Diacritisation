@@ -1,0 +1,13 @@
+Notes,DER_ce,DER_noce,WER_ce,WER_noce,Data Per-Processing ,Results,Assigned to,Method,Status ,Model ,,split name have in:,No. samples to use,Link of the dataset,Dataset name 
+,,,,,"Yes, Need",Train,Saad,LoRa Fine-Tuning,To Do,Qwan 3.5 - 4B,,"train, test",train: ,Misraj/Sadeed_Tashkeela,Misraj/Sadeed_Tashkeela
+,,,,,"No, Don't need",Test,Saad,LoRa Fine-Tuning,To Do,Qwan 3.5 - 4B,,train,1200,,Misraj/SadeedDiac-25
+,,,,,"No, Don't need",SadeedDiac-25,Saad,LoRa Fine-Tuning,To Do,Qwan 3.5 - 4B,,,,,
+,,,,,"Yes, Need",Train,Saad,QLoRA Fine-Tuning,To Do,Qwan 3.5 - 4B,,,,,
+,,,,,"No, Don't need",Test,Saad,QLoRA Fine-Tuning,To Do,Qwan 3.5 - 4B,,,,,
+,,,,,"No, Don't need",SadeedDiac-25,Saad,QLoRA Fine-Tuning,To Do,Qwan 3.5 - 4B,,,,,
+,,,,,"Yes, Need",Train,Mahdi,LoRa Fine-Tuning,In Progress,gemma-4-E4B-it,,,,,
+,,,,,"No, Don't need",Test,Mahdi,LoRa Fine-Tuning,In Progress,gemma-4-E4B-it,,,,,
+,,,,,"No, Don't need",SadeedDiac-25,Mahdi,LoRa Fine-Tuning,In Progress,gemma-4-E4B-it,,,,,
+,,,,,"Yes, Need",Train,Mahdi,QLoRA Fine-Tuning,In Progress,gemma-4-E4B-it,,,,,
+,,,,,"No, Don't need",Test,Mahdi,QLoRA Fine-Tuning,In Progress,gemma-4-E4B-it,,,,,
+,,,,,"No, Don't need",SadeedDiac-25,Mahdi,QLoRA Fine-Tuning,In Progress,gemma-4-E4B-it,,,,,

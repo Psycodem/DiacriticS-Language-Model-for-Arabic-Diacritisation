@@ -54,7 +54,11 @@ from transformers import (
 from peft import LoraConfig, prepare_model_for_kbit_training, get_peft_model, PeftModel
 
 # ---- Optional HF Hub login (set HF_TOKEN as an env var, never hardcode it) ----
-HF_TOKEN = os.environ.get("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")
+# NOTE: this previously passed a literal token as the env var *name*, which both
+# leaked the token into git history and always returned None. The leaked token
+# must be revoked at huggingface.co/settings/tokens — deleting it here does not
+# remove it from commit b6c05e6.
+HF_TOKEN = os.environ.get("HF_TOKEN")
 if HF_TOKEN:
     from huggingface_hub import login
     login(HF_TOKEN)
