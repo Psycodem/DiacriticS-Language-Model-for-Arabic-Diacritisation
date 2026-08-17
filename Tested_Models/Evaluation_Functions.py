@@ -1,27 +1,6 @@
 # -*- coding: utf-8 -*-
-"""models_functions.py — the one scoring implementation for every benchmark run.
-
-Canonical DER/WER for this folder. Every *_models_v2.py script imports from here
-so a number in the results sheet can be traced to exactly one implementation.
-
-WHY THIS FILE EXISTS
---------------------
-The v1 scripts each carried their own inline copy of these metrics, and the
-copies had drifted:
-
-    LLMs_Last_test.py, instruct_models_v1.py   numeral normalisation + citation
-                                               stripping + digit-token exclusion
-    Small_models_v1.py                         ce=/noce= split, but none of the above
-    Mideum_models_v1.py, Large_models_v1.py    none of the above
-
-That drift is visible in the results sheet: aya-expanse-8b appears twice on the
-MSA track, at 96.28 (Large_models_v1.py) and 86.21 (instruct_models_v1.py) —
-a ten-point spread produced by the scoring code, not the model. Numbers from
-different implementations cannot be ranked against each other, so the v2 scripts
-re-score every affected model through this module.
-
-Kept behaviourally identical to `Train Related/Models_Functions.py`; if you edit
-one, edit the other.
+"""
+This is evaluation Function useed for scoring implementation for every benchmark run
 """
 
 import re
