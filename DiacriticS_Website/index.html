@@ -155,7 +155,7 @@
   <!-- ============ PIPELINE ============ -->
   <section id="pipeline" class="section pipeline">
     <div class="section__head">
-      <p class="eyebrow" data-en="02 — Method" data-ar="٠٢ — المنهجية">02 — Method</p>
+      <p class="eyebrow" data-en="03 — Method" data-ar="٠٣ — المنهجية">03 — Method</p>
       <h2 data-en="How the project works" data-ar="كيف يعمل المشروع">How the project works</h2>
       <p class="section__intro"
          data-en="A strict wall between what the model learns from and what it is judged on. Five stages, run in order."
@@ -167,36 +167,36 @@
     <ol class="steps">
       <li class="step">
         <span class="step__n">01</span>
-        <h3 data-en="Curate the training corpus" data-ar="تجهيز بيانات التدريب">Curate the training corpus</h3>
-        <p 
-          data-en="‘Use Sadeed-Tashkeela corpus whitch is cleaned in multiple passes: duplicates removed, missing initial diacritics corrected, Alif-Lam shadda/sukun markers standardised, non-standard characters stripped. Result: roughly 1 million diacritised examples, ~53 million words."
-          data-ar="استخدام بيانات سديد-تشكيلة والتي تم تنظيفها عبر مراحل متعددة: إزالة التكرار، وتصحيح الحركات الأولى الناقصة، وتوحيد علامات الشدة والسكون على أل التعريف، وحذف الرموز غير القياسية. الناتج: نحو مليون مثال مُشكَّل بما يعادل ٥٣ مليون كلمة.">
-          Use Sadeed-Tashkeela corpus whitch is cleaned in multiple passes: duplicates removed, missing initial diacritics corrected, Alif-Lam shadda/sukun markers standardised, non-standard characters stripped. Result: roughly 1 million diacritised examples, ~53 million words.
+        <h3 data-en="Train on Sadeed-Tashkeela" data-ar="التدريب على Sadeed-Tashkeela">Train on Sadeed-Tashkeela</h3>
+        <p
+          data-en="The cleaned split of Tashkeela: unified diacritisation style, 50–60-word chunks, almost nothing left half-marked. Every example overlapping the Fadel test set was removed, cutting overlap to 0.4% — the train/test wall the project rests on. 1,042,698 examples, ~53M words."
+          data-ar="النسخة المنقّحة من مدونة تشكيلة: أسلوب تشكيل موحّد، وعيّنات من ٥٠ إلى ٦٠ كلمة، ولا يكاد يبقى نص ناقص التشكيل. وحُذف كل مثال يتداخل مع مجموعة اختبار Fadel حتى انخفض التداخل إلى ٠٫٤٪ — وهو الفاصل بين التدريب والاختبار الذي يقوم عليه المشروع. ١٬٠٤٢٬٦٩٨ مثالًا بنحو ٥٣ مليون كلمة.">
+          The cleaned split of Tashkeela: unified diacritisation style, 50–60-word chunks, almost nothing left half-marked. Every example overlapping the Fadel test set was removed, cutting overlap to 0.4% — the train/test wall the project rests on. 1,042,698 examples, ~53M words.
         </p>
       </li>
       <li class="step">
         <span class="step__n">02</span>
-        <h3 data-en="Adopt a contamination-controlled test set" data-ar="اعتماد معيار اختبار خالٍ من التلوث">Adopt a contamination-controlled test set</h3>
-        <p 
-          data-en="SadeedDiac-25 holds 1,200 human-reviewed paragraphs, split evenly between Modern Standard and Classical Arabic across news, sports, politics, religion, and literature — with 0.4%  overlap against training corpora."
-          data-ar="يضم معيار SadeedDiac-25 ألف ومئتي فقرة راجعها خبراء، موزّعة بالتساوي بين الفصحى المعاصرة والعربية التراثية عبر مجالات الأخبار والرياضة والسياسة والدين والأدب، مع تداخل قدره 0.4% مع بيانات التدريب.">
-          SadeedDiac-25 holds 1,200 human-reviewed paragraphs, split evenly between Modern Standard and Classical Arabic across news, sports, politics, religion, and literature — with 0.4% overlap against training corpora.
+        <h3 data-en="Test on SadeedDiac-25" data-ar="الاختبار على SadeedDiac-25">Test on SadeedDiac-25</h3>
+        <p
+          data-en="1,200 paragraphs, half Modern Standard and half Classical — 600 MSA paragraphs of 40–50 words (454 curated web articles, 146 from WikiNews) reviewed by two independent experts, and 600 Classical paragraphs from the Fadel test set. The modern half was diacritised in-house and never published diacritised, so no model had read it."
+          data-ar="ألف ومئتا فقرة، نصفها بالفصحى المعاصرة ونصفها بالعربية التراثية — ٦٠٠ فقرة معاصرة من ٤٠ إلى ٥٠ كلمة (٤٥٤ من مقالات مختارة و١٤٦ من ويكي الأخبار) راجعها خبيران مستقلان، و٦٠٠ فقرة تراثية من مجموعة اختبار Fadel. والنصف المعاصر شُكِّل داخليًا ولم يُنشر مُشكَّلًا، فلم يطّلع عليه أي نموذج.">
+          1,200 paragraphs, half Modern Standard and half Classical — 600 MSA paragraphs of 40–50 words (454 curated web articles, 146 from WikiNews) reviewed by two independent experts, and 600 Classical paragraphs from the Fadel test set. The modern half was diacritised in-house and never published diacritised, so no model had read it.
         </p>
       </li>
       <li class="step">
         <span class="step__n">03</span>
         <h3 data-en="Benchmark zero-shot, across scales" data-ar="قياس الأداء دون تدريب عبر أحجام مختلفة">Benchmark zero-shot, across scales</h3>
-        <p data-en="Eight open-weights models are scored cold, before any fine-tuning happens — establishing an honest baseline."
-           data-ar="يُقيَّم ثمانية نماذج مفتوحة الوزن دون أي تدريب مسبق، لبناء خط أساس صادق قبل أي ضبط دقيق.">
-          Eight open-weights models are scored cold, before any fine-tuning happens — establishing an honest baseline.
+        <p data-en="Eleven open-weights models are scored cold, before any fine-tuning happens — establishing an honest baseline."
+           data-ar="يُقيَّم أحد عشر نموذجًا مفتوح الأوزان دون أي تدريب مسبق، لبناء خط أساس صادق قبل أي ضبط دقيق.">
+          Eleven open-weights models are scored cold, before any fine-tuning happens — establishing an honest baseline.
         </p>
       </li>
       <li class="step">
         <span class="step__n">04</span>
-        <h3 data-en="Fine-tune with LoRA / QLoRA" data-ar="ضبط دقيق باستخدام LoRA / QLoRA">Fine-tune with LoRA / QLoRA</h3>
-        <p data-en="The strongest candidate model is adapted on the cleaned Tashkeela set using parameter-efficient fine-tuning, rather than full-weight retraining."
-           data-ar="يُكيَّف أفضل نموذج مرشّح على بيانات تشكيلة المنظّفة باستخدام تقنيات ضبط دقيق قليلة المعاملات، بدل إعادة تدريب كامل الأوزان.">
-          The strongest candidate model is adapted on the cleaned Tashkeela set using parameter-efficient fine-tuning, rather than full-weight retraining.
+        <h3 data-en="Fine-tune with LoRA, and scale the data" data-ar="ضبط دقيق باستخدام LoRA مع تدرّج حجم البيانات">Fine-tune with LoRA, and scale the data</h3>
+        <p data-en="The strongest candidate model is adapted on the cleaned Tashkeela set with LoRA only — no QLoRA, no full-weight retraining. Training is then repeated over 10%, 30%, and 50% of the corpus, so the gain can be read against the amount of data it took."
+           data-ar="يُكيَّف أفضل نموذج مرشّح على بيانات تشكيلة المنظّفة باستخدام LoRA فقط — دون QLoRA ودون إعادة تدريب كامل الأوزان. ثم يُعاد التدريب على ١٠٪ و٣٠٪ و٥٠٪ من البيانات، لقياس التحسّن مقابل حجم البيانات المستخدم.">
+          The strongest candidate model is adapted on the cleaned Tashkeela set with LoRA only — no QLoRA, no full-weight retraining. Training is then repeated over 10%, 30%, and 50% of the corpus, so the gain can be read against the amount of data it took.
         </p>
       </li>
       <li class="step">
@@ -225,47 +225,122 @@
   <!-- ============ RESULTS ============ -->
   <section id="results" class="section results">
     <div class="section__head">
-      <p class="eyebrow" data-en="03 — Baseline findings" data-ar="٠٣ — نتائج خط الأساس">03 — Baseline findings</p>
+      <p class="eyebrow" data-en="04 — Baseline findings" data-ar="٠٤ — نتائج خط الأساس">04 — Baseline findings</p>
       <h2 data-en="Results on SadeedDiac-25" data-ar="النتائج على معيار SadeedDiac-25">Results on SadeedDiac-25</h2>
       <p class="section__intro"
-         data-en="Zero-shot scores across eight open-weights models, before fine-tuning. Two patterns dominate every tier."
-         data-ar="نتائج دون تدريب مسبق لثمانية نماذج مفتوحة، قبل الضبط الدقيق. نمطان يتكرران في كل الفئات.">
-        Zero-shot scores across eight open-weights models, before fine-tuning. Two patterns dominate every tier.
+         data-en="Zero-shot scores across eleven open-weights models, before fine-tuning. Each figure averages the Modern Standard and Classical Arabic halves of the benchmark, and two patterns dominate every tier."
+         data-ar="نتائج دون تدريب مسبق لأحد عشر نموذجًا مفتوح الأوزان، قبل الضبط الدقيق. كل رقم هو متوسط نصفَي المعيار: الفصحى المعاصرة والعربية التراثية. ونمطان يتكرران في كل الفئات.">
+        Zero-shot scores across eleven open-weights models, before fine-tuning. Each figure averages the Modern Standard and Classical Arabic halves of the benchmark, and two patterns dominate every tier.
       </p>
     </div>
 
-    <div class="tiers">
-      <div class="tier-card">
-        <p class="tier-card__range">&lt; 500M</p>
-        <h3 data-en="Small models" data-ar="نماذج صغيرة">Small models</h3>
-        <ul class="model-list">
-          <li>Flan-T5-Tashkeel-Small</li>
-          <li>Glonor-ByT5-Arabic</li>
-          <li>Fine-Tashkeel</li>
-          <li>Tashkeel-350M-v2</li>
-        </ul>
-        <p class="tier-card__note" data-en="Task-built, structurally stable." data-ar="مُصمَّمة للمهمة، ومستقرة هيكليًا.">Task-built, structurally stable.</p>
+    <div class="scoreboard">
+      <div class="scoreboard__head">
+        <p class="scoreboard__label"
+           data-en="Mean (MSA + CA) · SadeedDiac-25 · lower is better"
+           data-ar="المتوسط (الفصحى المعاصرة + التراثية) · معيار SadeedDiac-25 · الأقل أفضل">
+          Mean (MSA + CA) · SadeedDiac-25 · lower is better
+        </p>
       </div>
-      <div class="tier-card">
-        <p class="tier-card__range">500M – 1B</p>
-        <h3 data-en="Medium models" data-ar="نماذج متوسطة">Medium models</h3>
-        <ul class="model-list">
-          <li>Qwen3.5-4B</li>
-          <li>Qwen3.5-9B</li>
-          <li>aya-expanse-8b</li>
-          <li>Fanar-1-9B-Instruct</li>
-        </ul>
-        <p class="tier-card__note" data-en="General-purpose, task-adapted." data-ar="عامة الغرض، مُكيَّفة للمهمة.">General-purpose, task-adapted.</p>
+
+      <div class="table-wrap">
+        <table class="scoretable">
+          <thead>
+            <tr>
+              <th class="col-model" scope="col" data-en="Model" data-ar="النموذج">Model</th>
+              <th class="num" scope="col">DER<span class="th-sub" data-en="with CE" data-ar="بالإعراب">with CE</span></th>
+              <th class="num" scope="col">WER<span class="th-sub" data-en="with CE" data-ar="بالإعراب">with CE</span></th>
+              <th class="num col-split" scope="col">DER<span class="th-sub" data-en="no CE" data-ar="بدون الإعراب">no CE</span></th>
+              <th class="num" scope="col">WER<span class="th-sub" data-en="no CE" data-ar="بدون الإعراب">no CE</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="is-best">
+              <th class="col-model" scope="row">gemma-4-E4B-it</th>
+              <td class="num num--bar" style="--v:5.74">5.74</td>
+              <td class="num">10.17</td>
+              <td class="num col-split">5.15</td>
+              <td class="num">6.86</td>
+            </tr>
+            <tr>
+              <th class="col-model" scope="row">Tashkeel-350M-v2</th>
+              <td class="num num--bar" style="--v:7.56">7.56</td>
+              <td class="num">14.53</td>
+              <td class="num col-split">6.49</td>
+              <td class="num">9.65</td>
+            </tr>
+            <tr>
+              <th class="col-model" scope="row">Flan-T5-Tashkeel-Small</th>
+              <td class="num num--bar" style="--v:11.52">11.52</td>
+              <td class="num">19.94</td>
+              <td class="num col-split">10.56</td>
+              <td class="num">14.12</td>
+            </tr>
+            <tr>
+              <th class="col-model" scope="row">Fine-Tashkeel</th>
+              <td class="num num--bar" style="--v:19.06">19.06</td>
+              <td class="num">22.52</td>
+              <td class="num col-split">18.80</td>
+              <td class="num">20.25</td>
+            </tr>
+            <tr>
+              <th class="col-model" scope="row">Fanar-1-9B-Instruct</th>
+              <td class="num num--bar" style="--v:24.98">24.98</td>
+              <td class="num">29.58</td>
+              <td class="num col-split">24.72</td>
+              <td class="num">26.78</td>
+            </tr>
+            <tr>
+              <th class="col-model" scope="row">Glonor-ByT5-Arabic</th>
+              <td class="num num--bar" style="--v:41.35">41.35</td>
+              <td class="num">48.76</td>
+              <td class="num col-split">39.48</td>
+              <td class="num">42.58</td>
+            </tr>
+            <tr>
+              <th class="col-model" scope="row">Gemma-3-1B-pt-10k-diacritization</th>
+              <td class="num num--bar" style="--v:41.58">41.58</td>
+              <td class="num">47.98</td>
+              <td class="num col-split">42.26</td>
+              <td class="num">44.26</td>
+            </tr>
+            <tr>
+              <th class="col-model" scope="row">Qwen3.5-9B</th>
+              <td class="num num--bar" style="--v:55.19">55.19</td>
+              <td class="num">65.93</td>
+              <td class="num col-split">55.44</td>
+              <td class="num">60.49</td>
+            </tr>
+            <tr>
+              <th class="col-model" scope="row">Qwen3.5-4B</th>
+              <td class="num num--bar" style="--v:73.74">73.74</td>
+              <td class="num">81.86</td>
+              <td class="num col-split">73.49</td>
+              <td class="num">77.25</td>
+            </tr>
+            <tr>
+              <th class="col-model" scope="row">aya-expanse-8b</th>
+              <td class="num num--bar" style="--v:92.35">92.35</td>
+              <td class="num">92.78</td>
+              <td class="num col-split">92.02</td>
+              <td class="num">91.85</td>
+            </tr>
+            <tr>
+              <th class="col-model" scope="row">Moonlight-16B-A3B-Instruct</th>
+              <td class="num num--bar" style="--v:99.38">99.38</td>
+              <td class="num">98.68</td>
+              <td class="num col-split">99.31</td>
+              <td class="num">98.50</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <div class="tier-card">
-        <p class="tier-card__range">&gt; 1B</p>
-        <h3 data-en="Large models" data-ar="نماذج كبيرة">Large models</h3>
-        <ul class="model-list">
-          <li>Moonlight-16B-A3B-Instruct</li>
-          <li>gemma-4-E4B-it</li>
-        </ul>
-        <p class="tier-card__note" data-en="Instruction-tuned, general LLMs." data-ar="نماذج لغوية عامة مضبوطة بالتعليمات.">Instruction-tuned, general LLMs.</p>
-      </div>
+
+      <p class="scoreboard__foot"
+         data-en="CE = sentence-final case endings (i'rab). Every figure is the mean of the Modern Standard and Classical Arabic halves of the benchmark, sorted by DER with case endings."
+         data-ar="الإعراب = علامات الإعراب في أواخر الجمل. كل رقم هو متوسط نصفَي المعيار: الفصحى المعاصرة والعربية التراثية، مرتّبة حسب معدل خطأ الحركات مع الإعراب.">
+        CE = sentence-final case endings (i'rab). Every figure is the mean of the Modern Standard and Classical Arabic halves of the benchmark, sorted by DER with case endings.
+      </p>
     </div>
 
     <div class="findings">
@@ -299,7 +374,7 @@
   <!-- ============ REFERENCES ============ -->
   <section id="references" class="section references">
     <div class="section__head">
-      <p class="eyebrow" data-en="04 — Grounding" data-ar="٠٤ — المصادر">04 — Grounding</p>
+      <p class="eyebrow" data-en="05 — Grounding" data-ar="٠٥ — المصادر">05 — Grounding</p>
       <h2 data-en="References" data-ar="المراجع">References</h2>
     </div>
 
@@ -338,16 +413,6 @@
         </span>
         <p class="ref-card__title"><a href="https://arxiv.org/abs/2603.01622" target="_blank" rel="noopener noreferrer">More Data, Fewer Diacritics: Scaling Arabic TTS</a></p>
         <p class="ref-card__meta">T. Author et al. · 2024</p>
-      </div>
-      <div class="ref-card">
-        <span class="ref-icon" aria-hidden="true">↗</span>
-        <p class="ref-card__title"><a href="https://aclanthology.org/N16-3003/" target="_blank" rel="noopener noreferrer">Farasa: A Fast and Furious Segmenter for Arabic</a></p>
-        <p class="ref-card__meta">A. Abdelali, K. Darwish, N. Durrani &amp; H. Mubarak · NAACL · 2016</p>
-      </div>
-      <div class="ref-card">
-        <span class="ref-icon" aria-hidden="true">↗</span>
-        <p class="ref-card__title"><a href="https://www.researchgate.net/publication/340227528_Arabic_Text_Segmentation_using_Contextual_Exploration_and_Morphological_Analysis" target="_blank" rel="noopener noreferrer">Arabic Text Segmentation Using Contextual Exploration and Morphological Analysis</a></p>
-        <p class="ref-card__meta">M. A. Cheragui &amp; E. Hiri · ICMIT · 2020</p>
       </div>
       <div class="ref-card">
         <span class="ref-icon" aria-hidden="true">↗</span>
