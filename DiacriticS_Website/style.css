@@ -179,6 +179,47 @@ a{ color: inherit; }
 .hero__cta:hover{ transform: translateY(-2px); box-shadow: var(--shadow-lg); filter: saturate(1.1); }
 .hero__cta:active{ transform: translateY(0); }
 
+/* ---- hero quick links (report / demo / repo) ---- */
+.hero__links{
+  display:flex; flex-wrap:wrap; justify-content:center; gap:14px;
+  margin-top: 44px;
+}
+.hero-link{
+  display:flex; align-items:center; gap:14px; text-align:start; text-decoration:none;
+  min-width: 220px; padding: 14px 20px;
+  background: var(--card); border:1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--shadow-sm); color: var(--paper-hi);
+  transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease);
+}
+.hero-link:hover{ transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: rgba(178,58,46,.32); }
+.hero-link__icon{
+  flex:none; display:flex; align-items:center; justify-content:center;
+  width:40px; height:40px; border-radius:50%;
+  color: var(--vermilion); background: rgba(178,58,46,.09); border:1px solid rgba(178,58,46,.18);
+  transition: background .25s var(--ease), color .25s var(--ease);
+}
+.hero-link__icon svg{ width:20px; height:20px; }
+.hero-link:hover .hero-link__icon{ background: var(--vermilion); color:#fffaf0; }
+.hero-link__text{ display:flex; flex-direction:column; gap:2px; }
+.hero-link__label{ font-family: var(--display-en); font-weight:600; font-size:1rem; line-height:1.25; }
+.hero-link__meta{ font-family: var(--mono); font-size:.7rem; letter-spacing:.03em; color: var(--muted-on-ink); }
+html[data-lang="ar"] .hero-link__label{ font-family: var(--display-ar); font-size:1.15rem; }
+
+/* placeholder tiles — an <a> with no href is neither clickable nor focusable */
+.hero-link.is-soon{
+  background: transparent; border-style: dashed; box-shadow:none;
+  color: var(--muted-on-ink); cursor: default;
+}
+.hero-link.is-soon:hover{ transform:none; box-shadow:none; border-color: var(--line); }
+.hero-link.is-soon .hero-link__icon{
+  color: var(--muted-on-ink); background: rgba(28,19,19,.05); border-color: var(--line);
+}
+.hero-link.is-soon:hover .hero-link__icon{ background: rgba(28,19,19,.05); color: var(--muted-on-ink); }
+@media (max-width: 560px){
+  .hero__links{ flex-direction:column; align-items:stretch; }
+  .hero-link{ min-width:0; }
+}
+
 /* ============ SECTIONS (shared) ============ */
 .section{
   position: relative; z-index:1;
