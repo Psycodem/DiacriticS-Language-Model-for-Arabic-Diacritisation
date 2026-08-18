@@ -7,8 +7,8 @@
 <div align="center">
 
 [![Website](https://img.shields.io/badge/Website-diacritics.vercel.app-000000.svg?logo=vercel)](https://diacritics.vercel.app/)
-[![Benchmark](https://img.shields.io/badge/%F0%9F%A4%97%20Benchmark-SadeedDiac--25-yellow.svg)](https://huggingface.co/datasets/Misraj/SadeedDiac-25)
-[![Corpus](https://img.shields.io/badge/%F0%9F%A4%97%20Corpus-Sadeed__Tashkeela-yellow.svg)](https://huggingface.co/datasets/Misraj/Sadeed_Tashkeela)
+[![Benchmark](https://img.shields.io/badge/Benchmark-SadeedDiac--25-yellow.svg)](https://huggingface.co/datasets/Misraj/SadeedDiac-25)
+[![Corpus](https://img.shields.io/badge/Corpus-Sadeed__Tashkeela-yellow.svg)](https://huggingface.co/datasets/Misraj/Sadeed_Tashkeela)
 [![KAUST Academy](https://img.shields.io/badge/KAUST%20Academy-AI%20Summer%202026-blue.svg)](https://academy.kaust.edu.sa/)
 
 <!-- To add a banner: drag an image into a GitHub issue/PR comment, copy the
@@ -20,22 +20,16 @@
 
 </div>
 
-## 📰 News
-- **[2026.08]** LoRA data-scaling runs released — 10% / 30% / 50% / 100% of the training split, for both Gemma-4-E4B and Qwen3.5-4B
-- **[2026.08]** Corrected DER/WER scorer released, fixing five defects in the original scorer
-- **[2026.08]** Zero-shot benchmark of 11 open-weights models on SadeedDiac-25
-- **[2026.08]** Bilingual (EN/AR) project site live at [diacritics.vercel.app](https://diacritics.vercel.app/)
+## Highlights
 
-## 🎯 Highlights
+- **Contamination-controlled by construction** — trained on Sadeed-Tashkeela, evaluated on SadeedDiac-25, with only **0.4% overlap** between the training corpus and the Fadel test set it is scored against
+- **11 open-weights models benchmarked zero-shot**, scored on the mean of the Modern Standard and Classical Arabic halves of the benchmark
+- **LoRA only — no QLoRA, no full-weight retraining**, under an explicit fairness contract that holds every optimisation-relevant hyperparameter identical across models
+- **4-point data-scaling curve** (10/30/50/100%) over *nested* subsets, so the points form a curve rather than four unrelated samples
+- **Corrected DER/WER scorer** — NFC normalisation, letter-anchored mark comparison, reference-fixed denominator, hallucinated words counted, dagger alef included
+- **Bilingual project site** (English / Arabic, RTL-aware)
 
-- 🧱 **Contamination-controlled by construction** — trained on Sadeed-Tashkeela, evaluated on SadeedDiac-25, with only **0.4% overlap** between the training corpus and the Fadel test set it is scored against
-- 📊 **11 open-weights models benchmarked zero-shot**, scored on the mean of the Modern Standard and Classical Arabic halves of the benchmark
-- 🔧 **LoRA only — no QLoRA, no full-weight retraining**, under an explicit fairness contract that holds every optimisation-relevant hyperparameter identical across models
-- 📉 **4-point data-scaling curve** (10/30/50/100%) over *nested* subsets, so the points form a curve rather than four unrelated samples
-- 🧪 **Corrected DER/WER scorer** — NFC normalisation, letter-anchored mark comparison, reference-fixed denominator, hallucinated words counted, dagger alef included
-- 🌍 **Bilingual project site** (English / Arabic, RTL-aware)
-
-## 🔍 Introduction
+## Introduction
 
 Arabic Text Diacritisation (ATD) — restoring the short vowels and marks (*tashkeel*) that are almost always omitted from written Arabic — is a foundational preprocessing step for Text-to-Speech, Machine Translation, and Information Extraction. Without diacritics, one skeleton of letters maps to several unrelated words. The root **ع ل م** alone can read as:
 
@@ -50,7 +44,7 @@ The harder problem is *measuring* diacritisation honestly. Existing benchmarks s
 **DiacriticS** builds the pipeline around that problem: a cleaned training corpus with verified minimal overlap against a balanced CA/MSA benchmark, used first to score open-weights models cold, then to fine-tune them with LoRA at several data scales.
 
 <details>
-<summary>📐 The two datasets, precisely</summary>
+<summary>The two datasets, precisely</summary>
 
 **Training — [`Misraj/Sadeed_Tashkeela`](https://huggingface.co/datasets/Misraj/Sadeed_Tashkeela)**
 The cleaned split of the Tashkeela corpus. Diacritisation style is unified (sukūn dropped on elongation letters and on the definite article's lām before a sun letter; frequent stop words corrected; *iltiqāʾ as-sākinayn* resolved by phonological rule), while non-Arabic characters and symbols are deliberately preserved. Text is chunked into 50–60-word samples and filtered so few carry more than two undiacritised words. Every example overlapping the Fadel test set was removed, cutting overlap to **0.4%** (at most two shared words per sample). Result: **1,042,698 examples, ~53M words**.
@@ -79,7 +73,7 @@ WER = (Words with ≥1 diacritic error / Total words) × 100
 
 Both metrics are reported with and without Case Endings (CE).
 
-## ⚙️ Installation
+## Installation
 
 ### Requirements
 - Python ≥ 3.9, CUDA GPU recommended (the fine-tuning runs assume 3× A100 80GB).
@@ -104,7 +98,7 @@ export HF_TOKEN="hf_..."   # On Windows PowerShell: $env:HF_TOKEN="hf_..."
 ```
 
 <details>
-<summary>🗂️ Repository layout</summary>
+<summary>Repository layout</summary>
 
 ```
 Evaluation_Functions.py              # original DER/WER scorer (kept for reference)
@@ -131,7 +125,7 @@ DiacriticS_Website/                  # the bilingual project site (deployed on V
 
 </details>
 
-## 🚀 Quick Start
+## Quick Start
 
 ### A) Benchmark open-weights models zero-shot
 
@@ -164,7 +158,7 @@ print(metrics["DER_noce"], metrics["WER_noce"])  # without
 ```
 
 <details>
-<summary>🧪 What the corrected scorer fixes</summary>
+<summary>What the corrected scorer fixes</summary>
 
 1. **No NFC normalisation** — shadda + fatha can be stored in either order and render identically; a positional comparison scored the two orders as different (worth ~2.4× on identical predictions).
 2. **Marks compared without their host letter** — a flat per-word mark list makes "right mark, wrong letter" compare equal; with only ~8 distinct marks, those collisions are common.
@@ -196,7 +190,7 @@ sbatch Trained_Models/Qwen_3_5_4B_LoRA_Diacritization/ibex_config/run_qwen_lora_
 Results land in `eval_outputs-<tag>/metrics_summary.csv`.
 
 <details>
-<summary>🔒 The fairness contract (why the two models are comparable)</summary>
+<summary>The fairness contract (why the two models are comparable)</summary>
 
 Every setting that affects *what the optimizer sees and how it updates the model* is held identical across both scripts; only memory-fitting settings differ, with the downstream quantity forced equal.
 
@@ -223,7 +217,7 @@ Only `PER_DEVICE_TRAIN_BATCH_SIZE` differs (Gemma 4, Qwen 8); gradient accumulat
 python -m http.server 4173 --directory DiacriticS_Website
 ```
 
-## ✅ Performance
+## Performance
 
 Zero-shot on **SadeedDiac-25**, mean of the MSA and CA halves. Lower is better; sorted by DER with case endings.
 
@@ -244,7 +238,7 @@ Zero-shot on **SadeedDiac-25**, mean of the MSA and CA halves. Lower is better; 
 Per-register numbers (MSA and CA scored separately) are in [`Tested_Models/Tested Models Results.xlsx`](Tested_Models/).
 
 <details>
-<summary>📊 Published reference points on the same benchmark</summary>
+<summary>Published reference points on the same benchmark</summary>
 
 Reported by Aldallal et al. (Sadeed, Table 8) on SadeedDiac-25 — not re-run here, listed for orientation:
 
@@ -268,7 +262,7 @@ Reported by Aldallal et al. (Sadeed, Table 8) on SadeedDiac-25 — not re-run he
 1. **Sentence endings are the weak point.** Every model's error rate jumps on the sentence-final, case-marking diacritic (*i'rab*) compared to diacritics inside a word — these models resolve local spelling far better than sentence-level syntax.
 2. **Classical Arabic is the harder domain.** Error rates rise markedly moving from MSA passages to Classical Arabic, showing that domain-balanced training — not just more data — is what closes the gap.
 
-## 📚 References
+## References
 
 1. Z. Aldallal, S. Chrouf, K. Hennara, M. M. Hamed, M. Hreden & S. AlModhayan, *"Sadeed: Advancing Arabic Diacritization Through Small Language Model"*, [arXiv:2504.21635](https://arxiv.org/abs/2504.21635), 2025.
 2. A. Abbad et al., *"Character-based Arabic Tashkeel Transformer (CATT)"*, [github.com/abjadai/catt](https://github.com/abjadai/catt), 2023.
@@ -276,34 +270,6 @@ Reported by Aldallal et al. (Sadeed, Table 8) on SadeedDiac-25 — not re-run he
 4. *"AraXLM: Evaluating Arabic Diacritization Tools for Cross-Language Plagiarism Detection"*, [annals-csis.org](https://annals-csis.org/Volume_43/drp/4862.html), 2024.
 5. *"More Data, Fewer Diacritics: Scaling Arabic TTS"*, 2024.
 6. M. Cherradi & H. El Mahajer, *"Arabic Text Diacritization Using Deep Neural Networks and Transformer-Based Architectures"*, Knowledge and Decision Systems with Applications, 2025.
-
-## 📝 Citation
-
-If you use this work, please cite the project:
-
-```bibtex
-@misc{diacritics2026,
-  title        = {DiacriticS: Fine-Tuning an Open Language Model for Arabic Diacritisation},
-  author       = {Youssef S. Mohamed and Mahdi Alkhamis and Mohammad Alali and Saad Alnafjan},
-  year         = {2026},
-  howpublished = {\url{https://github.com/Psycodem/DiacriticS-Language-Model-for-Arabic-Diacritisation}},
-  note         = {KAUST Academy AI Summer Program}
-}
-```
-
-and the benchmark this work is built on:
-
-```bibtex
-@misc{aldallal2025sadeed,
-  title        = {Sadeed: Advancing Arabic Diacritization Through Small Language Model},
-  author       = {Zeina Aldallal and Sara Chrouf and Khalil Hennara and Mohamed Motasim Hamed and Muhammad Hreden and Safwan AlModhayan},
-  year         = {2025},
-  eprint       = {2504.21635},
-  archivePrefix= {arXiv},
-  primaryClass = {cs.CL},
-  url          = {https://arxiv.org/abs/2504.21635}
-}
-```
 
 ---
 
