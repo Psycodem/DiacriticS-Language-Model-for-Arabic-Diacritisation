@@ -81,6 +81,4 @@ Both metrics are reported with and without Case Endings (CE) calculations.
 3. Author et al., *"Sadeed: Advancing Arabic Diacritization Through Small Language Model"*, 2025.
 4. Author et al., *"AraXLM: Evaluating Arabic Diacritization Tools for Cross-Language Plagiarism Detection"*, 2024.
 5. Author et al., *"More Data, Fewer Diacritics: Scaling Arabic TTS"*, 2024.
-6. Abdelali, K. Darwish, N. Durrani & H. Mubarak, *"Farasa: A Fast and Furious Segmenter for Arabic"*, NAACL, 2016.
-7. Cheragui & E. Hiri, *"Arabic Text Segmentation Using Contextual Exploration and Morphological Analysis"*, ICMIT, 2020.
-8. M. Cherradi & H. El Mahajer, *"Arabic Text Diacritization Using Deep Neural Networks and Transformer-Based Architectures"*, Knowledge and Decision Systems with Applications, 2025.
+6. M. Cherradi & H. El Mahajer, *"Arabic Text Diacritization Using Deep Neural Networks and Transformer-Based Architectures"*, Knowledge and Decision Systems with Applications, 2025.
