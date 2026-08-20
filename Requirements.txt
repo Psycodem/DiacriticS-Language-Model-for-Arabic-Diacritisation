@@ -1,0 +1,63 @@
+# DiacriticS — Python dependencies
+#
+#   pip install -r Requirements.txt
+#
+# The versions below are not arbitrary. Each pin exists because a different
+# version was observed to fail on this project's models:
+#
+#   torch==2.11.0        torch 2.10 paired with transformers 5.15 cannot run
+#                        google/gemma-4-E4B-it on CUDA AT ALL — every dtype
+#                        (bf16/fp16/fp32) dies with
+#                          CUDA error: CUBLAS_STATUS_INVALID_VALUE ... cublasGemmEx
+#                        inside Gemma 4's per-layer-embeddings projection, while
+#                        the identical forward pass succeeds on CPU. Installing
+#                        torch and transformers together from PyPI fixes it.
+#
+#   transformers>=5.15   5.2 does not know the `gemma4` architecture at all:
+#                          ValueError: checkpoint has model type `gemma4` but
+#                          Transformers does not recognize this architecture
+#                        Note v5 also REMOVED `warmup_ratio` and `group_by_length`
+#                        from TrainingArguments; the training scripts account for
+#                        both.
+#
+#   peft>=0.19           Gemma 4 wraps its vision/audio projections in
+#                        Gemma4ClippableLinear, which inherits from nn.Module
+#                        rather than nn.Linear. PEFT type-checks before
+#                        filtering, so earlier versions raise
+#                          ValueError: Target module Gemma4ClippableLinear(...)
+#                          is not supported
+#                        (huggingface/peft#3129). 0.19+ ships Gemma-4 defaults.
+#
+#   tabulate             pandas .to_markdown() needs it. Without it the benchmark
+#                        scripts complete the ENTIRE evaluation and then crash on
+#                        the final results table, before writing any CSV — losing
+#                        hours of GPU time to a formatting library.
+#
+#   tiktoken             required by moonshotai/Moonlight-16B-A3B-Instruct's
+#                        tokenizer; without it that model silently fails to load
+#                        and is skipped.
+
+# --- core ---
+torch==2.11.0
+transformers>=5.15.0
+peft>=0.20.0
+accelerate>=1.12.0
+datasets>=4.0.0
+huggingface_hub
+
+# --- tokenisation / text ---
+sentencepiece
+pyarabic
+tiktoken
+blobfile
+
+# --- metrics, data, plotting ---
+jiwer
+pandas
+matplotlib
+tabulate
+tqdm
+
+# --- optional: only needed for the QLoRA (4-bit) code path, which the
+#     published runs do NOT use (USE_4BIT=False) ---
+# bitsandbytes>=0.44

@@ -77,6 +77,10 @@ Both metrics are reported with and without Case Endings (CE).
 ### Requirements
 - Python ≥ 3.9, CUDA GPU recommended (the fine-tuning runs assume 3× A100 80GB).
 - A Hugging Face account and `HF_TOKEN` for the gated models and datasets.
+- Pinned dependencies: [`Requirements.txt`](Requirements.txt). The pins are
+  deliberate — `torch 2.10` + `transformers 5.15` cannot run `gemma-4-E4B-it` on
+  CUDA at all, and `transformers < 5.15` does not recognise the `gemma4`
+  architecture. Each pin is annotated with the failure it prevents.
 
 ### Setup
 
@@ -89,8 +93,8 @@ cd DiacriticS-Language-Model-for-Arabic-Diacritisation
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# Install dependencies
-pip install torch transformers datasets accelerate peft jiwer tqdm pandas ipywidgets
+# Install dependencies (pinned — see the comments in the file)
+pip install -r Requirements.txt
 
 # Hugging Face token (needed for gated models / datasets)
 export HF_TOKEN="hf_..."   # On Windows PowerShell: $env:HF_TOKEN="hf_..."
@@ -200,7 +204,7 @@ Every setting that affects *what the optimizer sees and how it updates the model
 | Target modules | `q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj` |
 | Effective batch | **96**, global and post-accumulation, for both models |
 | Epochs | 1 full epoch over the training split |
-| Learning rate | `2e-4`, cosine schedule, 300 warmup steps |
+| Learning rate | `2e-4`, cosine schedule, warmup = **5% of total steps** |
 | Max sequence length | 1024 tokens |
 | Seed | 42 |
 | Decoding | Greedy, `max_new_tokens=512` |
@@ -210,7 +214,92 @@ Only `PER_DEVICE_TRAIN_BATCH_SIZE` differs (Gemma 4, Qwen 8); gradient accumulat
 
 </details>
 
-### D) Run the project site locally
+### D) Run inference with a fine-tuned LoRA adapter
+
+The training runs save a LoRA **adapter** (~165 MB), not a full model. Inference
+loads the original base model from the Hub and applies the adapter on top:
+
+```python
+import torch
+from transformers import AutoTokenizer, AutoModelForCausalLM
+from peft import PeftModel
+
+BASE    = "google/gemma-4-E4B-it"        # or "Qwen/Qwen3.5-4B"
+ADAPTER = "gemma-4-e4b-lora-diacritization-10pct/final_adapter"
+
+tok = AutoTokenizer.from_pretrained(BASE, trust_remote_code=True)
+if tok.pad_token is None:
+    tok.pad_token = tok.eos_token
+
+model = AutoModelForCausalLM.from_pretrained(
+    BASE, dtype=torch.bfloat16, device_map="auto", trust_remote_code=True)
+model = PeftModel.from_pretrained(model, ADAPTER)
+model = model.merge_and_unload()    # fold the adapter in — faster generation
+model.eval()
+```
+
+> `merge_and_unload()` is optional. Skip it to keep the adapter detachable
+> (useful for comparing several adapters against one base); keep it for speed.
+
+**The prompt must match training exactly**, or quality drops sharply for reasons
+that look like a bad model. Both scripts use this system prompt:
+
+```python
+SYSTEM_PROMPT = (
+    "أنت نظام متخصص في التشكيل الآلي للنصوص العربية. "
+    "مهمتك إضافة الحركات (التشكيل) الصحيحة إلى النص العربي المُدخل دون تغيير الكلمات أو ترتيبها، "
+    "مع مراعاة السياق النحوي والصرفي الكامل للجملة."
+)
+
+def build_messages(text):
+    # Both gemma-4-E4B-it and Qwen3.5-4B accept a system role. If you swap in a
+    # model whose chat template rejects one (Gemma 3 does), fold the system
+    # prompt into the user turn instead:
+    #     f"{SYSTEM_PROMPT}\n\n{text}"
+    return [{"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user",   "content": text}]
+
+def diacritize(text):
+    msgs = build_messages(text)
+    try:
+        # Qwen3.5 is a reasoning model: without enable_thinking=False it emits a
+        # <think> block that would be scored as if it were the diacritised text.
+        prompt = tok.apply_chat_template(
+            msgs, tokenize=False, add_generation_prompt=True, enable_thinking=False)
+    except TypeError:
+        prompt = tok.apply_chat_template(msgs, tokenize=False, add_generation_prompt=True)
+
+    enc = tok(prompt, return_tensors="pt").to(model.device)
+    with torch.no_grad():
+        out = model.generate(**enc, max_new_tokens=512, do_sample=False,
+                             pad_token_id=tok.pad_token_id)
+    gen = tok.decode(out[0, enc["input_ids"].shape[1]:], skip_special_tokens=True)
+
+    import re
+    gen = re.sub(r"<think>.*?</think>", "", gen, flags=re.DOTALL)   # closed block
+    if re.match(r"^\s*<think>", gen, flags=re.DOTALL):
+        return ""                                                   # truncated mid-thought
+    return gen.strip().strip('"“”').strip()
+
+print(diacritize("ذهب الطالب إلى المدرسة"))
+```
+
+Three details that matter, each of which cost a run when it was missing:
+
+- **Greedy decoding** (`do_sample=False`). The published numbers assume it;
+  sampling makes results non-reproducible.
+- **Strip `<think>` blocks** for Qwen. An *unclosed* block means generation hit
+  `max_new_tokens` mid-reasoning — return an empty prediction rather than
+  scoring reasoning text as if it were the answer.
+- **Left padding** if you batch: `tok.padding_side = "left"`. Right padding
+  silently corrupts batched generation.
+
+To reproduce the published scores rather than run ad-hoc inference, use the
+scoring functions in
+[`Evaluation_Functions_Corrected.py`](Evaluation_Functions_Corrected.py) — see
+section **B**.
+
+### E) Run the project site locally
 
 ```bash
 python -m http.server 4173 --directory DiacriticS_Website
