@@ -1,4 +1,4 @@
-# [KAUST Academy 2026] DiacriticS: Fine-Tuning an Open Language Model for Arabic Diacritisation
+# DiacriticS: Fine-Tuning an Open Language Model for Arabic Diacritisation
 **Authors:** <a href="https://mo-youssef.github.io/"><span>Youssef&nbsp;S.&nbsp;Mohamed</span></a> (Mentor, KAUST), 
 <a href="https://linktr.ee/psycodem"><span>Mahdi&nbsp;Alkhamis</span></a> (Team Leader, IAU), 
 <a href="https://www.linkedin.com/in/mohammad-alali-9b992135a/"><span>Mohammad&nbsp;Alali</span></a> (KFUPM), 
@@ -9,14 +9,13 @@
 [![Website](https://img.shields.io/badge/Website-diacritics.vercel.app-000000.svg?logo=vercel)](https://diacritics.vercel.app/)
 [![Benchmark](https://img.shields.io/badge/Benchmark-SadeedDiac--25-yellow.svg)](https://huggingface.co/datasets/Misraj/SadeedDiac-25)
 [![Corpus](https://img.shields.io/badge/Corpus-Sadeed__Tashkeela-yellow.svg)](https://huggingface.co/datasets/Misraj/Sadeed_Tashkeela)
-[![KAUST Academy](https://img.shields.io/badge/KAUST%20Academy-AI%20Summer%202026-blue.svg)](https://academy.kaust.edu.sa/)
 
 <!-- To add a banner: drag an image into a GitHub issue/PR comment, copy the
      generated user-attachments URL, and paste it into the <img> tag below.
 <img width="1188" alt="DiacriticS" src="PASTE_UPLOADED_IMAGE_URL_HERE" />
 -->
-
-[**Project site**](https://diacritics.vercel.app/) | [**Benchmark**](https://huggingface.co/datasets/Misraj/SadeedDiac-25) | [**Training corpus**](https://huggingface.co/datasets/Misraj/Sadeed_Tashkeela) | [**LoRA config notes**](Trained_Models/LoRA_Fine_Tuning_Config_Comparison.md)
+ 
+ [**LoRA config notes**](Trained_Models/LoRA_Fine_Tuning_Config_Comparison.md)
 
 </div>
 
@@ -25,9 +24,9 @@
 - **Contamination-controlled by construction** — trained on Sadeed-Tashkeela, evaluated on SadeedDiac-25, with only **0.4% overlap** between the training corpus and the Fadel test set it is scored against
 - **11 open-weights models benchmarked zero-shot**, scored on the mean of the Modern Standard and Classical Arabic halves of the benchmark
 - **LoRA only — no QLoRA, no full-weight retraining**, under an explicit fairness contract that holds every optimisation-relevant hyperparameter identical across models
-- **4-point data-scaling curve** (10/30/50/100%) over *nested* subsets, so the points form a curve rather than four unrelated samples
+- **4-point data-scaling curve** (10/30/50%) over *nested* subsets, so the points form a curve rather than four unrelated samples
 - **Corrected DER/WER scorer** — NFC normalisation, letter-anchored mark comparison, reference-fixed denominator, hallucinated words counted, dagger alef included
-- **Bilingual project site** (English / Arabic, RTL-aware)
+- **Bilingual project site** (English / Arabic)
 
 ## Introduction
 
@@ -63,7 +62,7 @@ The pipeline enforces a strict wall between what the model learns from and what 
 1. **Train on Sadeed-Tashkeela** — the cleaned split, with the 0.4% train/test wall built in.
 2. **Test on SadeedDiac-25** — MSA and CA in one benchmark, 1,200 expert-reviewed paragraphs.
 3. **Benchmark zero-shot, across scales** — score open-weights models cold, before any fine-tuning, for an honest baseline.
-4. **Fine-tune with LoRA, and scale the data** — LoRA on a bf16 base (no QLoRA), repeated over 10%, 30%, 50% and 100% of the corpus.
+4. **Fine-tune with LoRA, and scale the data** — LoRA on a bf16 base (no QLoRA), repeated over 10%, 30% and 50% of the corpus.
 5. **Score, then break the score apart** — DER and WER with and without sentence-final case endings, compared across CA vs. MSA to isolate where the errors come from.
 
 ```
