@@ -149,7 +149,16 @@ GRADIENT_CHECKPOINTING = True
 PER_DEVICE_EVAL_BATCH_SIZE = 2
 LEARNING_RATE = 2e-4
 LR_SCHEDULER_TYPE = "cosine"
-WARMUP_STEPS = 300
+# Warmup as a FRACTION of the run, not a fixed step count. A fixed 300 steps
+# meant a different schedule at every data fraction:
+#     10% =  1,086 steps -> 300 warmup = 27.6% of the run
+#     30% =  3,258 steps -> 300 warmup =  9.2%
+#     50% =  5,430 steps -> 300 warmup =  5.5%
+#    100% = 10,861 steps -> 300 warmup =  2.8%
+# a 10x spread in how long the model sat at peak LR, which is a confound in a
+# data-scaling comparison. A constant ratio gives every fraction the same curve
+# shape and still scales absolute warmup with data (54/162/271/543 steps at 5%).
+WARMUP_RATIO = 0.05
 WEIGHT_DECAY = 0.01
 LOGGING_STEPS = 20
 EVAL_STEPS = 200
@@ -742,6 +751,13 @@ def train_model(model, tokenizer, train_raw, test_raw):
 
     bf16_ok = torch.cuda.is_available() and torch.cuda.is_bf16_supported()
 
+    # transformers v5 REMOVED the warmup_ratio argument (only warmup_steps
+    # survives), so the ratio is resolved to an absolute step count here.
+    _total_steps = MAX_STEPS if (MAX_STEPS and MAX_STEPS > 0)         else steps_per_epoch * NUM_TRAIN_EPOCHS
+    warmup_steps_resolved = max(1, int(WARMUP_RATIO * _total_steps))
+    print(f"[INFO] warmup {WARMUP_RATIO:.1%} of {_total_steps:,} steps "
+          f"-> {warmup_steps_resolved:,} warmup steps")
+
     args = TrainingArguments(
         output_dir=OUTPUT_DIR,
         num_train_epochs=NUM_TRAIN_EPOCHS,
@@ -751,7 +767,7 @@ def train_model(model, tokenizer, train_raw, test_raw):
         gradient_accumulation_steps=GRADIENT_ACCUMULATION_STEPS,
         learning_rate=LEARNING_RATE,
         lr_scheduler_type=LR_SCHEDULER_TYPE,
-        warmup_steps=WARMUP_STEPS,
+        warmup_steps=warmup_steps_resolved,
         weight_decay=WEIGHT_DECAY,
         optim="paged_adamw_8bit" if USE_4BIT else "adamw_torch",
         bf16=bf16_ok,
@@ -765,9 +781,15 @@ def train_model(model, tokenizer, train_raw, test_raw):
         save_strategy="steps",
         save_steps=SAVE_STEPS,
         save_total_limit=SAVE_TOTAL_LIMIT,
-        load_best_model_at_end=True,
-        metric_for_best_model="eval_loss",
-        greater_is_better=False,
+        # DISABLED. With this True the 30% gemma run saved checkpoint-200 of
+        # 3,259 (verified by checksum: final_adapter == checkpoint-200). The
+        # in-training eval uses only 500 examples so eval_loss is noisy; it
+        # dipped at step 200 and never beat that, and the trainer faithfully
+        # kept a model still inside warmup. The 10% run kept its LAST
+        # checkpoint, so "10% vs 30%" was really "fully-trained vs
+        # barely-started". For a scaling curve every point must train to
+        # completion, so dataset size is the only variable.
+        load_best_model_at_end=False,
         # group_by_length=True was removed in transformers v5 — it raises
         # TypeError: unexpected keyword argument. It only bucketed similar-length
         # sequences to cut padding waste, so losing it costs some throughput but

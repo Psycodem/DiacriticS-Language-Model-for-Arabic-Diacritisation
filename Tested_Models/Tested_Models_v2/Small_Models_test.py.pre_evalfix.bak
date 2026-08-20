@@ -53,32 +53,11 @@ def strip_diacritics(text: str) -> str:
     """Consonantal skeleton: diacritics AND tatweel removed."""
     return DIACRITICS.sub('', text).replace(TATWEEL, '')
 
-# --- restored from Evaluation_Functions_Corrected.py ---
-# These were missing here, so Eastern-Arabic numerals were never folded
-# to Western and Fadel-style citations were never stripped, which shifted
-# WER relative to every other v2 script.
-_EASTERN_TO_WESTERN = str.maketrans("٠١٢٣٤٥٦٧٨٩", "0123456789")
-
-def normalize_numerals(text: str) -> str:
-    """Converts Eastern Arabic-Indic digits to Western Arabic digits."""
-    return text.translate(_EASTERN_TO_WESTERN)
-
-def strip_citation_refs(text: str) -> str:
-    """Removes trailing parenthetical numeric citations like '(41 / 251)'."""
-    text = re.sub(r'\(\s*\d+\s*/\s*\d+\s*\)', '', text)
-    return re.sub(r'\s+', ' ', text).strip()
-
-
 def clean_and_tokenize(text: str) -> list:
-    """NFC-normalizes, normalizes numerals, strips citations/tatweel, tokenizes.
-
-    NFC runs here, inside tokenization, rather than requiring every caller
-    to remember to normalize before scoring — the old scorer's NFC handling
-    was a separate call site that was easy to forget (see defect 1).
-    """
-    text = unicodedata.normalize("NFC", text)
-    text = strip_citation_refs(normalize_numerals(text)).replace(TATWEEL, '')
-    return re.sub(r'[^\w\sً-ٰٟ]', '', text).split()
+    """NFC-normalizes, strips tatweel, tokenizes."""
+    text = unicodedata.normalize("NFC", text).replace(TATWEEL, '')
+    cleaned = re.sub(r'[^\w\sً-ٰٟ]', '', text)
+    return cleaned.split()
 
 def segment_word(word: str) -> list:
     """Splits a word into [(base_letter, marks), ...] pairs, marks sorted so
