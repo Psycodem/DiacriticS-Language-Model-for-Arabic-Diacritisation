@@ -1,0 +1,24 @@
+---
+import { copy, routeFor, shared, type Locale } from "../content/site";
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = copy[locale];
+---
+
+<footer class="site-footer">
+  <div class="shell footer__grid">
+    <div>
+      <a class="wordmark wordmark--footer" href={routeFor(locale, "home")}>
+        <span class="wordmark__mark" aria-hidden="true">َ</span>
+        <span dir="ltr">DiacriticS</span>
+      </a>
+      <p>{t.footer.note}</p>
+      <p class="footer__photo-credit">{t.footer.photoCredit}</p>
+    </div>
+    <div class="footer__notes">
+      <p dir="ltr">{t.footer.authors}</p>
+      <a class="footer__repo" href={shared.githubUrl} target="_blank" rel="noopener noreferrer">{t.footer.repo}</a>
+    </div>
+  </div>
+</footer>

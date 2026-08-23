@@ -1,0 +1,12 @@
+# DiacriticS
+
+DiacriticS is an English-language research presentation and model interface for Arabic diacritisation.
+
+## Canonical sections
+
+- / — English research overview
+- /demo/ — English model interface
+
+## Research provenance
+
+The public results table reports the eleven-model zero-shot baseline on SadeedDiac-25 before fine-tuning.

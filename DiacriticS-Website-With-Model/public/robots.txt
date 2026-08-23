@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://diacritics.example/sitemap.xml

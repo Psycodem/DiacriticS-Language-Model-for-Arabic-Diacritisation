@@ -1,0 +1,122 @@
+---
+import { copy, routeFor, type Locale } from "../content/site";
+
+interface Props { locale: Locale; page?: "home" | "demo" | "other" }
+
+const { locale, page = "home" } = Astro.props;
+const t = copy[locale];
+const anchor = (id: string) => page === "home" ? `#${id}` : `${routeFor(locale, "home")}#${id}`;
+const themeLabels = locale === "ar"
+  ? { dark: "التبديل إلى الوضع الداكن", light: "التبديل إلى الوضع الفاتح" }
+  : { dark: "Switch to dark mode", light: "Switch to light mode" };
+const sections = ["idea", "team", "pipeline", "results", "references"] as const;
+const otherLocale: Locale = locale === "ar" ? "en" : "ar";
+const otherPage = page === "demo" ? "demo" : "home";
+---
+
+<header class="site-header">
+  <div class="header__shell header__inner">
+    <a class="wordmark" href={routeFor(locale, "home")} aria-label="DiacriticS home">
+      <span class="wordmark__mark" aria-hidden="true">َ</span>
+      <span dir="ltr">DiacriticS</span>
+    </a>
+    <nav class="primary-nav" aria-label={locale === "ar" ? "التنقل الرئيسي" : "Primary navigation"}>
+      {sections.map((id) => (
+        <a href={anchor(id)} data-nav-section={page === "home" ? id : undefined}>{t.nav[id]}</a>
+      ))}
+    </nav>
+    <div class="nav-actions">
+      <a class="nav-cta" href={routeFor(locale, "demo")} aria-current={page === "demo" ? "page" : undefined}>
+        {t.nav.demo}
+      </a>
+      <button
+        class="theme-toggle"
+        type="button"
+        data-theme-toggle
+        data-dark-label={themeLabels.dark}
+        data-light-label={themeLabels.light}
+        aria-label={themeLabels.dark}
+        aria-pressed="false"
+      >
+        <svg class="theme-toggle__sun" viewBox="0 0 24 24" width="17" height="17" aria-hidden="true">
+          <circle cx="12" cy="12" r="3.5"></circle>
+          <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M18.7 5.3l-1.4 1.4M6.7 17.3l-1.4 1.4"></path>
+        </svg>
+        <svg class="theme-toggle__moon" viewBox="0 0 24 24" width="17" height="17" aria-hidden="true">
+          <path d="M20 15.2A8 8 0 0 1 8.8 4 8.2 8.2 0 1 0 20 15.2Z"></path>
+        </svg>
+      </button>
+      <a
+        class:list={["lang-switch", { "is-ar": locale === "ar" }]}
+        href={routeFor(otherLocale, otherPage)}
+        aria-label={t.nav.languageLabel}
+        hreflang={otherLocale}
+        lang={otherLocale}
+        dir={otherLocale === "ar" ? "rtl" : "ltr"}
+      >
+        <span class="lang-switch__en">EN</span>
+        <span class="lang-switch__sep" aria-hidden="true">/</span>
+        <span class="lang-switch__ar">ع</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const root = document.documentElement;
+  const colorMeta = document.querySelector<HTMLMetaElement>("[data-theme-color]");
+  const toggles = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]"));
+
+  const updateThemeControls = () => {
+    const isDark = root.dataset.theme === "dark";
+    colorMeta?.setAttribute("content", isDark ? "#17140F" : "#F4EBDD");
+    for (const toggle of toggles) {
+      toggle.setAttribute("aria-pressed", String(isDark));
+      const label = isDark ? toggle.dataset.lightLabel : toggle.dataset.darkLabel;
+      if (label) {
+        toggle.setAttribute("aria-label", label);
+        toggle.title = label;
+      }
+    }
+  };
+
+  for (const toggle of toggles) {
+    toggle.addEventListener("click", () => {
+      const next = root.dataset.theme === "dark" ? "light" : "dark";
+      root.dataset.theme = next;
+      try { localStorage.setItem("diacritics-theme", next); } catch {}
+      updateThemeControls();
+    });
+  }
+
+  const systemTheme = matchMedia("(prefers-color-scheme: dark)");
+  systemTheme.addEventListener("change", (event) => {
+    let hasStoredPreference = false;
+    try { hasStoredPreference = localStorage.getItem("diacritics-theme") !== null; } catch {}
+    if (!hasStoredPreference) {
+      root.dataset.theme = event.matches ? "dark" : "light";
+      updateThemeControls();
+    }
+  });
+
+  updateThemeControls();
+
+  const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>("[data-nav-section]"));
+  const sections = navLinks
+    .map((link) => document.getElementById(link.dataset.navSection!))
+    .filter((el): el is HTMLElement => el !== null);
+
+  if (navLinks.length && sections.length && "IntersectionObserver" in window) {
+    const setActive = (id: string | undefined) => {
+      for (const link of navLinks) link.classList.toggle("is-active", link.dataset.navSection === id);
+    };
+    const seen = new Map<string, number>();
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) seen.set(entry.target.id, entry.intersectionRatio);
+      let best: string | undefined; let bestRatio = 0;
+      for (const [id, ratio] of seen) if (ratio > bestRatio) { bestRatio = ratio; best = id; }
+      if (best) setActive(best);
+    }, { rootMargin: "-30% 0px -60% 0px", threshold: [0, 0.25, 0.5, 1] });
+    for (const section of sections) observer.observe(section);
+  }
+</script>

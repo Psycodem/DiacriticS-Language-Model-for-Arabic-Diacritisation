@@ -1,0 +1,56 @@
+# Everything below is local-only work that has never been in the GitHub repo.
+# The one untracked directory deliberately left visible to git is
+# DiacriticS-Website-With-Model/ — the shippable website. Anything you want to
+# publish later just needs its line removed from this file.
+
+# --- OS / editor noise -------------------------------------------------------
+.DS_Store
+**/.DS_Store
+.claude/
+~$*.xlsx
+
+# --- Untracked training and evaluation packages (Modal / Ibex) ---------------
+Train Related/
+Train-Qwen/
+Train-Qwen-0.8B-Full-FT/
+Train-Qwen-0.8B-LoRA/
+Train-Related-to-smaller-model/
+Train-Related-to-smaller-model.zip
+Train-Tagging/
+Train-Tagging-Qwen/
+Fine-Tune-qwen-9-0.8-Findings/
+Fine-Tune-qwen-9-0.8-Findings.zip
+
+# --- Local model runtime scratch ---------------------------------------------
+hf_cache/
+qwen3.5-0.8b-fullft-diacritization/
+ibex_diacritics_qwen35_08b/
+
+# --- Untracked inference / deploy plumbing -----------------------------------
+Deploy-Web/
+Diacritize-Local/
+
+# --- Superseded website work (kept locally, not published) -------------------
+DiacriticS/
+DiacriticS-html/
+Archive/
+DIACRITICS_DESIGN_DIRECTIONS.html
+TASHKEEL_BOX_TEARDOWN.html
+
+# Untracked additions inside the tracked DiacriticS_Website/ directory.
+# index.html and the rest of that folder stay tracked as before.
+DiacriticS_Website/.env.example
+DiacriticS_Website/api/
+DiacriticS_Website/assets/
+DiacriticS_Website/examples.json
+DiacriticS_Website/try.css
+DiacriticS_Website/try.html
+DiacriticS_Website/try.js
+
+# --- Local notes and agent instructions --------------------------------------
+# Remove these lines if you decide the guidance files belong in the repo.
+CLAUDE.md
+AGENTS.md
+DIACRITICS_BUILD_BRIEF.md
+NOTEBOOKS_EXPLAINED.md
+Models to test & Results.xlsx
