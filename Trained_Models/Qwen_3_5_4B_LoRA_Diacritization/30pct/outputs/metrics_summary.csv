@@ -1,0 +1,4 @@
+﻿model,method,split,n_examples,n_empty_predictions,DER_ce,DER_noce,WER_ce,WER_noce
+Qwen/Qwen3.5-4B,LoRA,train,500,0,1.78,1.63,3.26,2.2
+Qwen/Qwen3.5-4B,LoRA,test,2485,0,13.93,13.42,16.89,14.17
+Qwen/Qwen3.5-4B,LoRA,benchmark_sadeeddiac25,1200,0,5.27,5.03,9.28,6.54

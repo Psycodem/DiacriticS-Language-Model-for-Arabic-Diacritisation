@@ -1,0 +1,29 @@
+# --- model weights -------------------------------------------------------
+# The LoRA adapters live on the Hugging Face Hub, not in git:
+#   https://huggingface.co/Psycodem/gemma-4-e4b-lora-diacritization
+#   https://huggingface.co/Psycodem/qwen3.5-4b-lora-diacritization
+# Each training fraction is a subfolder there:
+#   PeftModel.from_pretrained(model, "<repo>", subfolder="50pct")
+#
+# GitHub hard-rejects any file over 100 MB, and the Gemma adapters are ~134 MB
+# each. Everything else about a run -- config, predictions, logs, model card --
+# is tracked, so the results stay reproducible without the weights in history.
+*.safetensors
+*.bin
+
+# tokenizer.json is 20-32 MB and identical across the three fractions of a
+# model; the Hub copies are authoritative.
+Trained_Models/**/adapter/tokenizer.json
+
+# --- python --------------------------------------------------------------
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+venv/
+.venv/
+
+# --- local scratch -------------------------------------------------------
+*.bak
+*.pre_evalfix.bak
+.DS_Store
+Thumbs.db

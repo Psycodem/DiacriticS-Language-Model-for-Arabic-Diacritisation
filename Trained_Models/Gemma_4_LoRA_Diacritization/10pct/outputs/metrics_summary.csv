@@ -1,0 +1,4 @@
+﻿model,method,split,n_examples,n_empty_predictions,DER_ce,DER_noce,WER_ce,WER_noce
+google/gemma-4-E4B-it,LoRA,train,500,0,1.23,1.01,3.24,1.86
+google/gemma-4-E4B-it,LoRA,test,2485,0,12.96,12.45,16.2,13.33
+google/gemma-4-E4B-it,LoRA,benchmark_sadeeddiac25,1200,0,3.15,2.68,7.28,4.47

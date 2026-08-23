@@ -24,6 +24,8 @@
     <a href="#team" data-en="Team" data-ar="الفريق">Team</a>
     <a href="#pipeline" data-en="Pipeline" data-ar="آلية العمل">Pipeline</a>
     <a href="#results" data-en="Results" data-ar="النتائج">Results</a>
+    <a href="#finetuning" data-en="Fine-Tuning" data-ar="الضبط الدقيق">Fine-Tuning</a>
+    <a href="#regime" data-en="LoRA vs Full" data-ar="لورا مقابل الكامل">LoRA vs Full</a>
     <a href="#references" data-en="References" data-ar="المراجع">References</a>
   </div>
   <button class="lang-toggle" id="langToggle" aria-label="Switch language">
@@ -279,9 +281,9 @@
       <p class="eyebrow" data-en="04 — Baseline findings" data-ar="04 — نتائج خط الأساس">04 — Baseline findings</p>
       <h2 data-en="Results on SadeedDiac-25" data-ar="النتائج على معيار SadeedDiac-25">Results on SadeedDiac-25</h2>
       <p class="section__intro"
-         data-en="Zero-shot scores across eleven open-weights models, before fine-tuning. Each figure averages the Modern Standard and Classical Arabic halves of the benchmark, and two patterns dominate every tier."
-         data-ar="نتائج دون تدريب مسبق لأحد عشر نموذجًا مفتوح الأوزان، قبل الضبط الدقيق. كل رقم هو متوسط نصفَي المعيار: الفصحى المعاصرة والعربية التراثية. ونمطان يتكرران في كل الفئات.">
-        Zero-shot scores across eleven open-weights models, before fine-tuning. Each figure averages the Modern Standard and Classical Arabic halves of the benchmark, and two patterns dominate every tier.
+         data-en="Zero-shot scores across twelve open-weights models, before any fine-tuning. Each figure averages the Modern Standard and Classical Arabic halves of the benchmark, and two patterns dominate every tier."
+         data-ar="نتائج دون تدريب مسبق لاثني عشر نموذجًا مفتوح الأوزان، قبل أي ضبط دقيق. كل رقم هو متوسط نصفَي المعيار: الفصحى المعاصرة والعربية التراثية. ونمطان يتكرران في كل الفئات.">
+        Zero-shot scores across twelve open-weights models, before any fine-tuning. Each figure averages the Modern Standard and Classical Arabic halves of the benchmark, and two patterns dominate every tier.
       </p>
     </div>
 
@@ -307,81 +309,88 @@
           </thead>
           <tbody>
             <tr class="is-best">
+              <th class="col-model" scope="row">Flan-T5-Tashkeel-Small</th>
+              <td class="num num--bar" style="--v:4.10">4.10</td>
+              <td class="num">11.86</td>
+              <td class="num col-split">3.61</td>
+              <td class="num">7.88</td>
+            </tr>
+            <tr>
               <th class="col-model" scope="row">gemma-4-E4B-it</th>
-              <td class="num num--bar" style="--v:5.74">5.74</td>
-              <td class="num">10.17</td>
-              <td class="num col-split">5.15</td>
-              <td class="num">6.86</td>
+              <td class="num num--bar" style="--v:4.18">4.18</td>
+              <td class="num">9.96</td>
+              <td class="num col-split">3.80</td>
+              <td class="num">6.78</td>
             </tr>
             <tr>
               <th class="col-model" scope="row">Tashkeel-350M-v2</th>
-              <td class="num num--bar" style="--v:7.56">7.56</td>
-              <td class="num">14.53</td>
-              <td class="num col-split">6.49</td>
-              <td class="num">9.65</td>
-            </tr>
-            <tr>
-              <th class="col-model" scope="row">Flan-T5-Tashkeel-Small</th>
-              <td class="num num--bar" style="--v:11.52">11.52</td>
-              <td class="num">19.94</td>
-              <td class="num col-split">10.56</td>
-              <td class="num">14.12</td>
+              <td class="num num--bar" style="--v:6.33">6.33</td>
+              <td class="num">15.28</td>
+              <td class="num col-split">5.64</td>
+              <td class="num">10.40</td>
             </tr>
             <tr>
               <th class="col-model" scope="row">Fine-Tashkeel</th>
-              <td class="num num--bar" style="--v:19.06">19.06</td>
-              <td class="num">22.52</td>
-              <td class="num col-split">18.80</td>
-              <td class="num">20.25</td>
+              <td class="num num--bar" style="--v:17.91">17.91</td>
+              <td class="num">22.61</td>
+              <td class="num col-split">17.73</td>
+              <td class="num">20.35</td>
             </tr>
             <tr>
               <th class="col-model" scope="row">Fanar-1-9B-Instruct</th>
-              <td class="num num--bar" style="--v:24.98">24.98</td>
-              <td class="num">29.58</td>
-              <td class="num col-split">24.72</td>
-              <td class="num">26.78</td>
+              <td class="num num--bar" style="--v:26.14">26.14</td>
+              <td class="num">31.48</td>
+              <td class="num col-split">26.35</td>
+              <td class="num">28.81</td>
             </tr>
             <tr>
               <th class="col-model" scope="row">Glonor-ByT5-Arabic</th>
-              <td class="num num--bar" style="--v:41.35">41.35</td>
-              <td class="num">48.76</td>
-              <td class="num col-split">39.48</td>
-              <td class="num">42.58</td>
-            </tr>
-            <tr>
-              <th class="col-model" scope="row">Gemma-3-1B-pt-10k-diacritization</th>
-              <td class="num num--bar" style="--v:41.58">41.58</td>
-              <td class="num">47.98</td>
-              <td class="num col-split">42.26</td>
-              <td class="num">44.26</td>
+              <td class="num num--bar" style="--v:33.62">33.62</td>
+              <td class="num">50.68</td>
+              <td class="num col-split">33.22</td>
+              <td class="num">44.77</td>
             </tr>
             <tr>
               <th class="col-model" scope="row">Qwen3.5-9B</th>
-              <td class="num num--bar" style="--v:55.19">55.19</td>
-              <td class="num">65.93</td>
-              <td class="num col-split">55.44</td>
-              <td class="num">60.49</td>
+              <td class="num num--bar" style="--v:39.78">39.78</td>
+              <td class="num">59.44</td>
+              <td class="num col-split">41.92</td>
+              <td class="num">55.69</td>
+            </tr>
+            <tr>
+              <th class="col-model" scope="row">gemma-3-1b-pt-10k-diacritization</th>
+              <td class="num num--bar" style="--v:50.25">50.25</td>
+              <td class="num">55.81</td>
+              <td class="num col-split">50.66</td>
+              <td class="num">52.95</td>
             </tr>
             <tr>
               <th class="col-model" scope="row">Qwen3.5-4B</th>
-              <td class="num num--bar" style="--v:73.74">73.74</td>
-              <td class="num">81.86</td>
-              <td class="num col-split">73.49</td>
-              <td class="num">77.25</td>
+              <td class="num num--bar" style="--v:58.29">58.29</td>
+              <td class="num">79.00</td>
+              <td class="num col-split">59.43</td>
+              <td class="num">75.22</td>
             </tr>
             <tr>
               <th class="col-model" scope="row">aya-expanse-8b</th>
-              <td class="num num--bar" style="--v:92.35">92.35</td>
-              <td class="num">92.78</td>
-              <td class="num col-split">92.02</td>
-              <td class="num">91.85</td>
+              <td class="num num--bar" style="--v:66.55">66.55</td>
+              <td class="num">85.78</td>
+              <td class="num col-split">67.08</td>
+              <td class="num">84.04</td>
             </tr>
             <tr>
               <th class="col-model" scope="row">Moonlight-16B-A3B-Instruct</th>
-              <td class="num num--bar" style="--v:99.38">99.38</td>
-              <td class="num">98.68</td>
-              <td class="num col-split">99.31</td>
-              <td class="num">98.50</td>
+              <td class="num num--bar" style="--v:86.60">86.60</td>
+              <td class="num">99.01</td>
+              <td class="num col-split">87.10</td>
+              <td class="num">98.84</td>
+            </tr>
+            <tr>
+              <th class="col-model" scope="row">Qwen3.5-0.8B</th>
+              <td class="num num--bar" style="--v:92.18">92.18</td>
+              <td class="num">99.67</td>
+              <td class="num col-split">92.41</td>
+              <td class="num">99.62</td>
             </tr>
           </tbody>
         </table>
@@ -393,6 +402,8 @@
         CE = sentence-final case endings (i'rab). Every figure is the mean of the Modern Standard and Classical Arabic halves of the benchmark, sorted by DER with case endings.
       </p>
     </div>
+
+
 
     <div class="findings">
       <div class="finding-card">
@@ -422,10 +433,212 @@
     </div>
   </section>
 
+
+  <!-- ============ FINE-TUNING ============ -->
+  <section id="finetuning" class="section results">
+    <div class="section__head">
+      <p class="eyebrow" data-en="05 — Fine-tuning" data-ar="05 — الضبط الدقيق">05 — Fine-tuning</p>
+      <h2 data-en="What fine-tuning buys" data-ar="ماذا يضيف الضبط الدقيق">What fine-tuning buys</h2>
+      <p class="section__intro"
+         data-en="Both 4B targets were adapted with LoRA under identical conditions on nested slices of the training corpus, so the 10% slice sits inside the 30% and that inside the 50%. Only the data volume and the backbone differ. The starting point turns out to matter far more than the slope."
+         data-ar="جرى ضبط النموذجين بحجم أربعة مليارات معامل بطريقة LoRA تحت ظروف متطابقة على شرائح متداخلة من بيانات التدريب، بحيث تقع شريحة ١٠٪ داخل ٣٠٪ وهذه داخل ٥٠٪. الاختلاف الوحيد هو حجم البيانات والبنية الأساسية. وتبيّن أن نقطة البداية أهم بكثير من معدّل التحسّن.">
+        Both 4B targets were adapted with LoRA under identical conditions on nested slices of the training corpus, so the 10% slice sits inside the 30% and that inside the 50%. Only the data volume and the backbone differ. The starting point turns out to matter far more than the slope.
+      </p>
+    </div>
+
+    <div class="scoreboard">
+      <div class="scoreboard__head">
+        <p class="scoreboard__label"
+           data-en="After LoRA fine-tuning · SadeedDiac-25 · lower is better"
+           data-ar="بعد الضبط الدقيق بطريقة LoRA · معيار SadeedDiac-25 · الأقل أفضل">
+          After LoRA fine-tuning · SadeedDiac-25 · lower is better
+        </p>
+      </div>
+
+      <div class="table-wrap">
+        <table class="scoretable">
+          <thead>
+            <tr>
+              <th class="col-model" scope="col" data-en="Model / training data" data-ar="النموذج / حجم بيانات التدريب">Model / training data</th>
+              <th class="num" scope="col">DER<span class="th-sub" data-en="with CE" data-ar="بالإعراب">with CE</span></th>
+              <th class="num" scope="col">WER<span class="th-sub" data-en="with CE" data-ar="بالإعراب">with CE</span></th>
+              <th class="num col-split" scope="col">DER<span class="th-sub" data-en="no CE" data-ar="بدون الإعراب">no CE</span></th>
+              <th class="num" scope="col">WER<span class="th-sub" data-en="no CE" data-ar="بدون الإعراب">no CE</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th class="col-model" scope="row">gemma-4-E4B-it<span class="th-sub">zero-shot</span></th>
+              <td class="num num--bar" style="--v:4.18">4.18</td>
+              <td class="num">9.96</td>
+              <td class="num col-split">3.80</td>
+              <td class="num">6.78</td>
+            </tr>
+            <tr>
+              <th class="col-model" scope="row">gemma-4-E4B-it<span class="th-sub">10%</span></th>
+              <td class="num num--bar" style="--v:3.15">3.15</td>
+              <td class="num">7.28</td>
+              <td class="num col-split">2.68</td>
+              <td class="num">4.47</td>
+            </tr>
+            <tr>
+              <th class="col-model" scope="row">gemma-4-E4B-it<span class="th-sub">30%</span></th>
+              <td class="num num--bar" style="--v:2.98">2.98</td>
+              <td class="num">6.82</td>
+              <td class="num col-split">2.54</td>
+              <td class="num">4.12</td>
+            </tr>
+            <tr class="is-best">
+              <th class="col-model" scope="row">gemma-4-E4B-it<span class="th-sub">50%</span></th>
+              <td class="num num--bar" style="--v:2.81">2.81</td>
+              <td class="num">6.54</td>
+              <td class="num col-split">2.38</td>
+              <td class="num">3.96</td>
+            </tr>
+            <tr>
+              <th class="col-model" scope="row">Qwen3.5-4B<span class="th-sub">zero-shot</span></th>
+              <td class="num num--bar" style="--v:58.29">58.29</td>
+              <td class="num">79.00</td>
+              <td class="num col-split">59.43</td>
+              <td class="num">75.22</td>
+            </tr>
+            <tr>
+              <th class="col-model" scope="row">Qwen3.5-4B<span class="th-sub">10%</span></th>
+              <td class="num num--bar" style="--v:7.07">7.07</td>
+              <td class="num">11.74</td>
+              <td class="num col-split">6.94</td>
+              <td class="num">8.74</td>
+            </tr>
+            <tr>
+              <th class="col-model" scope="row">Qwen3.5-4B<span class="th-sub">30%</span></th>
+              <td class="num num--bar" style="--v:5.27">5.27</td>
+              <td class="num">9.28</td>
+              <td class="num col-split">5.03</td>
+              <td class="num">6.54</td>
+            </tr>
+            <tr>
+              <th class="col-model" scope="row">Qwen3.5-4B<span class="th-sub">50%</span></th>
+              <td class="num num--bar" style="--v:4.38">4.38</td>
+              <td class="num">8.18</td>
+              <td class="num col-split">4.07</td>
+              <td class="num">5.57</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="scoreboard__foot"
+         data-en="Both models adapted under identical conditions — LoRA rank 16, effective batch 96, one epoch, 5% warmup, seed 42 — on nested subsets of Sadeed Tashkeela, so the 10% subset sits inside the 30% and that inside the 50%. Gemma leads at every fraction, but the gap narrows from 54.1 points to 1.6."
+         data-ar="جرى ضبط النموذجين تحت ظروف متطابقة — رتبة LoRA ١٦، حجم دفعة فعّال ٩٦، دورة تدريب واحدة، إحماء ٥٪، بذرة عشوائية ٤٢ — على مجموعات متداخلة من بيانات سديد تشكيلة، بحيث تقع نسبة ١٠٪ داخل ٣٠٪ وهذه داخل ٥٠٪. يتفوّق جيما في كل النسب، لكن الفارق يضيق من ٥٤٫١ نقطة إلى ١٫٦.">
+        Both models adapted under identical conditions — LoRA rank 16, effective batch 96, one epoch, 5% warmup, seed 42 — on nested subsets of Sadeed Tashkeela, so the 10% subset sits inside the 30% and that inside the 50%. Gemma leads at every fraction, but the gap narrows from 54.1 points to 1.6.
+      </p>
+    </div>
+
+    <div class="findings">
+      <div class="finding-card">
+        <span class="finding-card__tag" data-en="Finding 3" data-ar="النتيجة الثالثة">Finding 3</span>
+        <h3 data-en="A weak start gains the most" data-ar="النموذج الأضعف هو الأكثر استفادة">A weak start gains the most</h3>
+        <p data-en="Qwen3.5-4B falls from 58.29% to 4.38% DER — a thirteen-fold reduction, and 51.2 of those 54 points are bought by the first tenth of the corpus alone. Gemma 4 E4B-it starts at 4.18%, already below where Qwen finishes, and reaches 2.81%. Gemma leads at every fraction, but the gap between them narrows from 54.1 points to 1.6."
+           data-ar="ينخفض نموذج Qwen3.5-4B من ٥٨٫٢٩٪ إلى ٤٫٣٨٪ في معدل خطأ الحركات — أي إلى الثُلث عشر تقريبًا، و٥١٫٢ نقطة من أصل ٥٤ تتحقق من عُشر البيانات الأول وحده. أما Gemma 4 E4B-it فيبدأ من ٤٫١٨٪، أي أقل مما ينتهي إليه Qwen، ويصل إلى ٢٫٨١٪. يتفوّق جيما في كل النسب، لكن الفارق بينهما يضيق من ٥٤٫١ نقطة إلى ١٫٦.">
+          Qwen3.5-4B falls from 58.29% to 4.38% DER — a thirteen-fold reduction, and 51.2 of those 54 points are bought by the first tenth of the corpus alone. Gemma 4 E4B-it starts at 4.18%, already below where Qwen finishes, and reaches 2.81%. Gemma leads at every fraction, but the gap between them narrows from 54.1 points to 1.6.
+        </p>
+      </div>
+      <div class="finding-card">
+        <span class="finding-card__tag" data-en="Finding 4" data-ar="النتيجة الرابعة">Finding 4</span>
+        <h3 data-en="Returns diminish quickly" data-ar="العائد يتناقص سريعًا">Returns diminish quickly</h3>
+        <p data-en="Both curves are monotonic with sharply diminishing returns. For Qwen the first tenth of the corpus is worth 51.2 DER points, the next fifth 1.8, and the final fifth only 0.9. Five times the data past the first slice buys less than four percent of the original gain."
+           data-ar="يتحسّن النموذجان باطّراد لكن مع تناقص حاد في العائد. فبالنسبة إلى Qwen، يساوي عُشر البيانات الأول ٥١٫٢ نقطة، والخُمس التالي ١٫٨ نقطة، والخُمس الأخير ٠٫٩ نقطة فقط. أي أن مضاعفة البيانات خمس مرات بعد الشريحة الأولى تضيف أقل من أربعة بالمئة من المكسب الأصلي.">
+          Both curves are monotonic with sharply diminishing returns. For Qwen the first tenth of the corpus is worth 51.2 DER points, the next fifth 1.8, and the final fifth only 0.9. Five times the data past the first slice buys less than four percent of the original gain.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ADAPTATION REGIME ============ -->
+  <section id="regime" class="section results">
+    <div class="section__head">
+      <p class="eyebrow" data-en="06 — Adaptation regime" data-ar="06 — أسلوب الضبط">06 — Adaptation regime</p>
+      <h2 data-en="LoRA or every weight?" data-ar="لورا أم كل الأوزان؟">LoRA or every weight?</h2>
+      <p class="section__intro"
+         data-en="Qwen3.5-0.8B is small enough to train end to end, which makes it the one place in this study where the adaptation regime can be isolated. Base checkpoint, corpus and prompt are held identical; only the fraction of weights allowed to move changes."
+         data-ar="نموذج Qwen3.5-0.8B صغير بما يكفي لتدريبه بالكامل، وهو الموضع الوحيد في هذه الدراسة الذي يمكن فيه عزل أثر أسلوب الضبط. فنقطة الانطلاق والبيانات وصيغة التوجيه متطابقة تمامًا، ولا يتغيّر سوى نسبة الأوزان المسموح لها بالتغيّر.">
+        Qwen3.5-0.8B is small enough to train end to end, which makes it the one place in this study where the adaptation regime can be isolated. Base checkpoint, corpus and prompt are held identical; only the fraction of weights allowed to move changes.
+      </p>
+    </div>
+
+    <div class="scoreboard">
+      <div class="scoreboard__head">
+        <p class="scoreboard__label" data-en="Qwen3.5-0.8B · SadeedDiac-25 · lower is better" data-ar="‏Qwen3.5-0.8B · معيار SadeedDiac-25 · الأقل أفضل">
+          Qwen3.5-0.8B · SadeedDiac-25 · lower is better
+        </p>
+      </div>
+
+      <div class="table-wrap">
+        <table class="scoretable">
+          <thead>
+            <tr>
+              <th class="col-model" scope="col" data-en="Adaptation regime" data-ar="أسلوب الضبط">Adaptation regime</th>
+              <th class="num" scope="col">DER<span class="th-sub" data-en="with CE" data-ar="بالإعراب">with CE</span></th>
+              <th class="num" scope="col">WER<span class="th-sub" data-en="with CE" data-ar="بالإعراب">with CE</span></th>
+              <th class="num col-split" scope="col">DER<span class="th-sub" data-en="no CE" data-ar="بدون الإعراب">no CE</span></th>
+              <th class="num" scope="col">WER<span class="th-sub" data-en="no CE" data-ar="بدون الإعراب">no CE</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th class="col-model" scope="row">Zero-shot<span class="th-sub">no training</span></th>
+              <td class="num num--bar" style="--v:92.18">92.18</td>
+              <td class="num">99.67</td>
+              <td class="num col-split">92.41</td>
+              <td class="num">99.62</td>
+            </tr>
+            <tr>
+              <th class="col-model" scope="row">LoRA<span class="th-sub">rank 16, 100% of corpus</span></th>
+              <td class="num num--bar" style="--v:3.60">3.60</td>
+              <td class="num">8.28</td>
+              <td class="num col-split">3.15</td>
+              <td class="num">4.98</td>
+            </tr>
+            <tr class="is-best">
+              <th class="col-model" scope="row">Full fine-tuning<span class="th-sub">all weights, 100% of corpus</span></th>
+              <td class="num num--bar" style="--v:3.06">3.06</td>
+              <td class="num">7.34</td>
+              <td class="num col-split">2.58</td>
+              <td class="num">4.12</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="scoreboard__foot" data-en="Full fine-tuning wins by 0.54 DER points. The margin is the result: a rank-16 adapter recovers roughly 94% of the benefit of updating every weight, at a fraction of the optimiser memory. Both also beat a five-times-larger 4B model adapted with LoRA on half the corpus (4.38% DER)." data-ar="يتفوّق الضبط الكامل بفارق ٠٫٥٤ نقطة فقط. وهذا الفارق الضيّق هو النتيجة نفسها: إذ يستعيد مُحوّل LoRA برتبة ١٦ نحو ٩٤٪ من فائدة تحديث كل الأوزان، بجزء يسير من ذاكرة المُحسِّن. كما يتفوّق كلاهما على نموذج أكبر بخمس مرات جرى ضبطه بطريقة LoRA على نصف البيانات (٤٫٣٨٪).">
+        Full fine-tuning wins by 0.54 DER points. The margin is the result: a rank-16 adapter recovers roughly 94% of the benefit of updating every weight, at a fraction of the optimiser memory. Both also beat a five-times-larger 4B model adapted with LoRA on half the corpus (4.38% DER).
+      </p>
+    </div>
+
+    <div class="findings">
+      <div class="finding-card">
+        <span class="finding-card__tag" data-en="Finding 5" data-ar="النتيجة الخامسة">Finding 5</span>
+        <h3 data-en="Size is not the binding constraint" data-ar="الحجم ليس القيد الحاسم">Size is not the binding constraint</h3>
+        <p data-en="A 0.8B model trained end to end reaches 3.06% DER, beating a 4B model adapted with LoRA on half the corpus (4.38%) at a fifth of the parameter count. For a task as narrow and surface-oriented as diacritic restoration, how much of the model is free to move matters more than how large it is."
+           data-ar="يصل نموذج بحجم ٠٫٨ مليار معامل مُدرَّب بالكامل إلى ٣٫٠٦٪، متفوّقًا على نموذج بأربعة مليارات معامل جرى ضبطه بطريقة LoRA على نصف البيانات (٤٫٣٨٪)، وبخُمس عدد المعاملات. وفي مهمة محدودة وسطحية مثل استعادة الحركات، فإن نسبة الأوزان القابلة للتغيّر أهم من حجم النموذج.">
+          A 0.8B model trained end to end reaches 3.06% DER, beating a 4B model adapted with LoRA on half the corpus (4.38%) at a fifth of the parameter count. For a task as narrow and surface-oriented as diacritic restoration, how much of the model is free to move matters more than how large it is.
+        </p>
+      </div>
+      <div class="finding-card">
+        <span class="finding-card__tag" data-en="Caveat" data-ar="تحفّظ">Caveat</span>
+        <h3 data-en="One row rests on the benchmark alone" data-ar="صفٌّ واحد يستند إلى المعيار وحده">One row rests on the benchmark alone</h3>
+        <p data-en="The LoRA run has been scored on the 1,200-paragraph benchmark but not yet on the held-in training sample or the held-out Tashkeela test split, so its train-to-benchmark generalisation gap cannot be checked the way the full fine-tune's can."
+           data-ar="جرى تقييم تشغيلة LoRA على المعيار المكوّن من ١٢٠٠ فقرة، لكن ليس بعد على عيّنة التدريب ولا على مجموعة الاختبار المحجوزة من تشكيلة، ولذلك لا يمكن التحقق من فجوة التعميم لديها كما هو الحال مع الضبط الكامل.">
+          The LoRA run has been scored on the 1,200-paragraph benchmark but not yet on the held-in training sample or the held-out Tashkeela test split, so its train-to-benchmark generalisation gap cannot be checked the way the full fine-tune's can.
+        </p>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ REFERENCES ============ -->
   <section id="references" class="section references">
     <div class="section__head">
-      <p class="eyebrow" data-en="05 — Grounding" data-ar="05 — المصادر">05 — Grounding</p>
+      <p class="eyebrow" data-en="07 — Grounding" data-ar="07 — المصادر">07 — Grounding</p>
       <h2 data-en="References" data-ar="المراجع">References</h2>
     </div>
 

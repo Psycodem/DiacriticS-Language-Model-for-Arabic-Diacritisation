@@ -104,27 +104,38 @@ export HF_TOKEN="hf_..."   # On Windows PowerShell: $env:HF_TOKEN="hf_..."
 <summary>Repository layout</summary>
 
 ```
-Evaluation_Functions.py              # original DER/WER scorer (kept for reference)
-Evaluation_Functions_Corrected.py    # corrected scorer — use this one
+Evaluation_Functions_Corrected.py    # the scorer — every number in this repo uses it
+Evaluation_Scorer_Comparison.py      # runnable diff vs the benchmark's own evaluator
+Requirements.txt                     # pinned deps, annotated with what each pin prevents
 Tested_Models/
-  Tested Models Results.xlsx         # raw benchmark results (MSA, CA, and mean)
-  Tested_Models_v2/                  # current zero-shot benchmark scripts
-    Small_Models_test.py             # < 500M: Fine-Tashkeel, Tashkeel-350M-v2
-    Flan-T5-based_ByT5-based_test.ipynb
+  Tested Models Results.xlsx         # zero-shot results (MSA, CA, and mean)
+  ibex_config/                       # the one benchmark that ran on Slurm
     Gemma_Qwen_test.py
-    Large_Models_test.py
-    Fanar_Model_test.py
-    ibex_config/                     # SLURM job files for each test script
+    run_gemma_qwen_test.sbatch
+  modal_config/                      # the rest ran on Modal; these produced the numbers
+    modal_small_models.py            # Fine-Tashkeel, Tashkeel-350M-v2
+    modal_large_models.py            # aya-expanse-8b, Moonlight-16B-A3B-Instruct
+    modal_fanar.py                   # Fanar-1-9B-Instruct
+    modal_flan_byt5.py               # Flan-T5-Tashkeel-Small, Glonor-ByT5-Arabic
+    modal_gemma3_1b.py               # gemma-3-1b-pt-10k-diacritization
+    modal_qwen35_08b_plain.py        # Qwen3.5-0.8B, stock zero-shot baseline
 Trained_Models/
   LoRA_Fine_Tuning_Config_Comparison.md   # the fairness contract, in full
   Gemma_4_LoRA_Diacritization/
     Train_LoRA_Gemma_4_Diacritization.py
-    ibex_config/                     # 10pct / 30pct / 50pct / full 3-GPU runs
-  Qwen_3_5_4B_LoRA_Diacritization/
-    Train_LoRA_Qwen_3_5_4B_Diacritization.py
-    ibex_config/
+    ibex_config/                     # 30pct / 50pct Slurm jobs
+    modal_config/                    # the 10pct run
+    HUGGINGFACE.md                   # where the published adapters live
+    10pct/ 30pct/ 50pct/
+      adapter/                       # config + model card (weights are on the Hub)
+      outputs/                       # predictions, metrics, training log, loss curve
+  Qwen_3_5_4B_LoRA_Diacritization/   # same shape
 DiacriticS_Website/                  # the bilingual project site (deployed on Vercel)
 ```
+
+Adapter weights are **not** in git — they are on the Hugging Face Hub (see
+[Performance](#performance)). Everything needed to reproduce or audit a run —
+config, per-split predictions, training log, model card — is tracked.
 
 </details>
 
@@ -134,17 +145,23 @@ DiacriticS_Website/                  # the bilingual project site (deployed on V
 
 Each script loads `Misraj/SadeedDiac-25` (`split="train"`, 1,200 paragraphs), strips the diacritics to build the prompt, generates, and scores DER/WER with and without case endings.
 
+Most of them run on [Modal](https://modal.com) — one GPU, checkpointed per
+prediction so an interrupted run resumes rather than restarts:
+
 ```bash
-python Tested_Models/Tested_Models_v2/Small_Models_test.py   # < 500M task-built models
-python Tested_Models/Tested_Models_v2/Gemma_Qwen_test.py     # Gemma / Qwen instruction-tuned
-python Tested_Models/Tested_Models_v2/Large_Models_test.py   # larger general LLMs
-python Tested_Models/Tested_Models_v2/Fanar_Model_test.py    # Fanar-1-9B-Instruct
+modal run Tested_Models/modal_config/modal_small_models.py --probe 5 --wait   # smoke test
+modal run --detach Tested_Models/modal_config/modal_small_models.py           # full 1,200
 ```
 
-On KAUST's Ibex cluster, submit the matching job file instead:
+Swap in `modal_large_models.py`, `modal_fanar.py`, `modal_flan_byt5.py`,
+`modal_gemma3_1b.py` or `modal_qwen35_08b_plain.py` for the other models. Use
+`--detach` for real runs: the entrypoint spawns the job and returns, so killing
+the client cannot cancel the work.
+
+On KAUST's Ibex cluster:
 
 ```bash
-sbatch Tested_Models/Tested_Models_v2/ibex_config/run_small_models_test.sbatch
+sbatch Tested_Models/ibex_config/run_gemma_qwen_test.sbatch
 ```
 
 ### B) Score your own predictions
@@ -208,7 +225,7 @@ Every setting that affects *what the optimizer sees and how it updates the model
 | Max sequence length | 1024 tokens |
 | Seed | 42 |
 | Decoding | Greedy, `max_new_tokens=512` |
-| Hardware | Ibex, 1 node × 3× A100 80GB, DDP via `torchrun` |
+| Hardware | 3× A100 80GB, DDP via `torchrun` — Ibex (Slurm) for the 30% and 50% runs, Modal for the 10% runs |
 
 Only `PER_DEVICE_TRAIN_BATCH_SIZE` differs (Gemma 4, Qwen 8); gradient accumulation is derived at runtime so the effective batch stays 96, and the script exits rather than run if it cannot. Full rationale: [`Trained_Models/LoRA_Fine_Tuning_Config_Comparison.md`](Trained_Models/LoRA_Fine_Tuning_Config_Comparison.md).
 
@@ -307,28 +324,76 @@ python -m http.server 4173 --directory DiacriticS_Website
 
 ## Performance
 
-Zero-shot on **SadeedDiac-25**, mean of the MSA and CA halves. Lower is better; sorted by DER with case endings.
+All numbers below are produced by [`Evaluation_Functions_Corrected.py`](Evaluation_Functions_Corrected.py),
+applied identically to every model and every split. Percentages; lower is better.
+CE = case ending (*i'rab*).
+
+### Zero-shot on SadeedDiac-25
+
+Mean of the MSA and CA halves (600 paragraphs each), sorted by DER with case endings.
 
 | Model | DER w/ CE (%) | WER w/ CE (%) | DER w/o CE (%) | WER w/o CE (%) |
 |---|---|---|---|---|
-| **gemma-4-E4B-it** | **5.74** | **10.17** | **5.15** | **6.86** |
-| Tashkeel-350M-v2 | 7.56 | 14.53 | 6.49 | 9.65 |
-| Flan-T5-Tashkeel-Small | 11.52 | 19.94 | 10.56 | 14.12 |
-| Fine-Tashkeel | 19.06 | 22.52 | 18.80 | 20.25 |
-| Fanar-1-9B-Instruct | 24.98 | 29.58 | 24.72 | 26.78 |
-| Glonor-ByT5-Arabic | 41.35 | 48.76 | 39.48 | 42.58 |
-| Gemma-3-1B-pt-10k-diacritization | 41.58 | 47.98 | 42.26 | 44.26 |
-| Qwen3.5-9B | 55.19 | 65.93 | 55.44 | 60.49 |
-| Qwen3.5-4B | 73.74 | 81.86 | 73.49 | 77.25 |
-| aya-expanse-8b | 92.35 | 92.78 | 92.02 | 91.85 |
-| Moonlight-16B-A3B-Instruct | 99.38 | 98.68 | 99.31 | 98.50 |
+| **Flan-T5-Tashkeel-Small** | **4.10** | **11.86** | **3.61** | **7.88** |
+| gemma-4-E4B-it | 4.18 | 9.96 | 3.80 | 6.78 |
+| Tashkeel-350M-v2 | 6.33 | 15.28 | 5.64 | 10.40 |
+| Fine-Tashkeel | 17.91 | 22.61 | 17.73 | 20.35 |
+| Fanar-1-9B-Instruct | 26.14 | 31.48 | 26.35 | 28.81 |
+| Glonor-ByT5-Arabic | 33.62 | 50.68 | 33.22 | 44.77 |
+| Qwen3.5-9B | 39.78 | 59.44 | 41.92 | 55.69 |
+| gemma-3-1b-pt-10k-diacritization | 50.25 | 55.81 | 50.66 | 52.95 |
+| Qwen3.5-4B | 58.29 | 79.00 | 59.43 | 75.22 |
+| aya-expanse-8b | 66.55 | 85.78 | 67.08 | 84.04 |
+| Moonlight-16B-A3B-Instruct | 86.60 | 99.01 | 87.10 | 98.84 |
+| Qwen3.5-0.8B | 92.18 | 99.67 | 92.41 | 99.62 |
 
-Per-register numbers (MSA and CA scored separately) are in [`Tested_Models/Tested Models Results.xlsx`](Tested_Models/).
+Per-register numbers (MSA and CA scored separately) are in
+[`Tested_Models/Tested Models Results.xlsx`](Tested_Models/). The scripts that
+produced them are in [`Tested_Models/`](Tested_Models/) — `modal_config/` for the
+Modal runs, `ibex_config/` for the Slurm one.
+
+### After LoRA fine-tuning
+
+Both targets adapted under identical conditions (rank 16, alpha 32, effective
+batch 96, one epoch, 5% warmup ratio, seed 42) on nested subsets of
+`Misraj/Sadeed_Tashkeela` drawn with a common shuffle seed, so the 10% subset is
+contained in the 30% and that in the 50%. Scored on the full 1,200-paragraph
+SadeedDiac-25 benchmark.
+
+| Base model | Training data | DER w/ CE (%) | WER w/ CE (%) | DER w/o CE (%) | WER w/o CE (%) |
+|---|---|---|---|---|---|
+| gemma-4-E4B-it | zero-shot | 4.18 | 9.96 | 3.80 | 6.78 |
+| gemma-4-E4B-it | 10% (104,270 rows) | 3.15 | 7.28 | 2.68 | 4.47 |
+| gemma-4-E4B-it | 30% (312,809 rows) | 2.98 | 6.82 | 2.54 | 4.12 |
+| **gemma-4-E4B-it** | **50% (521,349 rows)** | **2.81** | **6.54** | **2.38** | **3.96** |
+| Qwen3.5-4B | zero-shot | 58.29 | 79.00 | 59.43 | 75.22 |
+| Qwen3.5-4B | 10% (104,270 rows) | 7.07 | 11.74 | 6.94 | 8.74 |
+| Qwen3.5-4B | 30% (312,809 rows) | 5.27 | 9.28 | 5.03 | 6.54 |
+| Qwen3.5-4B | 50% (521,349 rows) | 4.38 | 8.18 | 4.07 | 5.57 |
+
+Adapters, per-split predictions and training logs for every row are under
+[`Trained_Models/`](Trained_Models/), and the adapters are published on the
+Hugging Face Hub:
+[`Psycodem/gemma-4-e4b-lora-diacritization`](https://huggingface.co/Psycodem/gemma-4-e4b-lora-diacritization)
+and
+[`Psycodem/qwen3.5-4b-lora-diacritization`](https://huggingface.co/Psycodem/qwen3.5-4b-lora-diacritization),
+with each training fraction as a subfolder:
+
+```python
+model = PeftModel.from_pretrained(
+    model, "Psycodem/gemma-4-e4b-lora-diacritization", subfolder="50pct")
+```
 
 <details>
 <summary>Published reference points on the same benchmark</summary>
 
-Reported by Aldallal et al. (Sadeed, Table 8) on SadeedDiac-25 — not re-run here, listed for orientation:
+Reported by Aldallal et al. (Sadeed, Table 8) on SadeedDiac-25 — **not re-run
+here, and not directly comparable**: they were produced with the benchmark's own
+reference evaluator, which discards any paragraph where the model changed the
+word count (15.4% of the benchmark for one of our fine-tuned models) and is
+sensitive to the Unicode ordering of combining marks. See
+[`Evaluation_Scorer_Comparison.py`](Evaluation_Scorer_Comparison.py) for a
+runnable demonstration. Listed for orientation only:
 
 | Model | DER w/ CE (%) | WER w/ CE (%) | DER w/o CE (%) | WER w/o CE (%) |
 |---|---|---|---|---|
@@ -347,8 +412,25 @@ Reported by Aldallal et al. (Sadeed, Table 8) on SadeedDiac-25 — not re-run he
 
 ### Key findings
 
-1. **Sentence endings are the weak point.** Every model's error rate jumps on the sentence-final, case-marking diacritic (*i'rab*) compared to diacritics inside a word — these models resolve local spelling far better than sentence-level syntax.
-2. **Classical Arabic is the harder domain.** Error rates rise markedly moving from MSA passages to Classical Arabic, showing that domain-balanced training — not just more data — is what closes the gap.
+1. **The evaluation protocol is itself a confound.** The benchmark's reference
+   evaluator drops any paragraph in which the model altered the word count, which
+   removes exactly the failures that separate a fluent generator from a faithful
+   diacritiser — 15.4% of the benchmark for our Qwen3.5-4B 50% model. It also
+   treats two Unicode orderings of shadda + vowel as different, penalising text
+   that NFC declares identical. Scores from different harnesses cannot be
+   compared without reconciling them first.
+2. **A weak starting point gains enormously from LoRA; a strong one has little
+   room.** Qwen3.5-4B falls from 58.29% to 4.38% DER, most of it purchased by the
+   first tenth of the corpus. gemma-4-E4B-it starts at 4.18% — already below
+   where Qwen finishes — and reaches 2.81%. Gemma leads at every fraction, but
+   the gap narrows from 54.1 points to 1.6.
+3. **Sentence endings are the weak point.** Every model's error rate jumps on the
+   sentence-final, case-marking diacritic (*i'rab*) compared with diacritics
+   inside a word — these models resolve local spelling far better than
+   sentence-level syntax.
+4. **Classical Arabic is the harder domain.** Error rates rise markedly moving
+   from MSA passages to Classical Arabic, showing that domain-balanced training —
+   not just more data — is what closes the gap.
 
 ## References
 

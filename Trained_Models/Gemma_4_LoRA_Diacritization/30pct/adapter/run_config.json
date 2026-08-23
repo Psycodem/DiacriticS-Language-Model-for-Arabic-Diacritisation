@@ -1,0 +1,22 @@
+{
+  "base_model": "google/gemma-4-E4B-it",
+  "use_4bit": false,
+  "lora_r": 16,
+  "lora_alpha": 32,
+  "lora_dropout": 0.05,
+  "target_modules": [
+    "q_proj",
+    "k_proj",
+    "v_proj",
+    "o_proj",
+    "gate_proj",
+    "up_proj",
+    "down_proj"
+  ],
+  "epochs": 1,
+  "max_steps": -1,
+  "lr": 0.0002,
+  "max_seq_length": 1024,
+  "effective_batch": 32,
+  "seed": 42
+}
