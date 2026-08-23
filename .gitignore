@@ -18,8 +18,8 @@ Train-Related-to-smaller-model/
 Train-Related-to-smaller-model.zip
 Train-Tagging/
 Train-Tagging-Qwen/
-Fine-Tune-qwen-9-0.8-Findings/
-Fine-Tune-qwen-9-0.8-Findings.zip
+Fine-Tune-qwen-*-Findings/
+Fine-Tune-qwen-*-Findings.zip
 
 # --- Local model runtime scratch ---------------------------------------------
 hf_cache/
