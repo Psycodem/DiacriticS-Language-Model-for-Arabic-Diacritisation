@@ -1,0 +1,31 @@
+---
+import DemoInterface from "./DemoInterface.astro";
+import Footer from "./Footer.astro";
+import Header from "./Header.astro";
+import { copy, routeFor, type Locale } from "../content/site";
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = copy[locale];
+---
+
+<Header locale={locale} page="demo" />
+<main id="main-content" class="demo-page">
+  <img class="demo-page__media" src="/images/andalusian-palace-demo.webp" alt="" width="1920" height="1280" fetchpriority="high" decoding="async" aria-hidden="true" />
+  <div class="demo-page__veil" aria-hidden="true"></div>
+  <section class="demo-hero demo-shell" aria-labelledby="demo-title">
+    <div class="demo-hero__topline">
+      <a class="text-link demo-back" href={`${routeFor(locale, "home")}#results`}>
+        <span aria-hidden="true">←</span> {t.demo.back}
+      </a>
+      <small class="demo-page__credit">{t.media.demo.credit}</small>
+    </div>
+    <div class="demo-hero__copy">
+      <p class="eyebrow">{t.demo.eyebrow}</p>
+      <h1 id="demo-title">{t.demo.title}</h1>
+    </div>
+  </section>
+  <div class="demo-shell">
+    <DemoInterface locale={locale} />
+  </div>
+</main>
+<Footer locale={locale} />

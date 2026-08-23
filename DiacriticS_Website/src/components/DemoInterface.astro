@@ -1,0 +1,232 @@
+---
+import { copy, type Locale } from "../content/site";
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = copy[locale];
+---
+
+<section class="demo-panel" data-demo data-locale={locale} data-errors={JSON.stringify(t.demo.errors)} data-default-error={t.demo.errorDefault} data-starting={t.demo.starting} data-fallback-example={t.demo.examples[0]} data-example-notice={t.demo.exampleNotice} data-example-fallback={t.demo.exampleFallback}>
+  <div class="demo-flow">
+    <form class="demo-form" data-demo-form novalidate>
+      <div class="field-heading">
+        <div>
+          <label for={`demo-input-${locale}`}>{t.demo.inputLabel}</label>
+          <p id={`input-hint-${locale}`}>{t.demo.inputHint}</p>
+        </div>
+        <output class="character-count" data-count data-count-label={t.demo.count} for={`demo-input-${locale}`}>0 {t.demo.count}</output>
+      </div>
+      <textarea
+        id={`demo-input-${locale}`}
+        data-input
+        name="text"
+        maxlength="5000"
+        rows="4"
+        dir="auto"
+        aria-describedby={`input-hint-${locale} demo-status-${locale}`}
+        placeholder={t.demo.placeholder}
+      ></textarea>
+      <div class="examples" aria-labelledby={`examples-label-${locale}`}>
+        <p id={`examples-label-${locale}`}>{t.demo.examplesLabel}</p>
+        <div>
+          <button class="example-chip" type="button" data-load-example data-idle={t.demo.loadExample} data-loading={t.demo.loadingExample}>
+            {t.demo.loadExample}
+          </button>
+        </div>
+        <p class="example-notice" data-example-notice role="status" aria-live="polite"></p>
+      </div>
+      <div class="form-actions">
+        <button class="button button--primary" type="submit" data-submit data-idle={t.demo.submit} data-loading={t.demo.submitting}>
+          <span>{t.demo.submit}</span>
+        </button>
+        <button class="button button--quiet" type="button" data-clear>{t.demo.clear}</button>
+      </div>
+      <p class="form-status" id={`demo-status-${locale}`} data-status role="status" aria-live="polite"></p>
+    </form>
+
+    <section class="result-panel" aria-label={t.demo.after} aria-live="polite" aria-busy="false" data-result-panel data-state="empty">
+      <div class="result-panel__header">
+        <span class="eyebrow">{t.demo.after}</span>
+        <button class="copy-button" type="button" data-copy disabled data-copy-label={t.demo.copy} data-copied-label={t.demo.copied}>
+          {t.demo.copy}
+        </button>
+      </div>
+      <div class="result-text" data-result dir="rtl" lang="ar">
+        <p class="result-placeholder" dir={locale === "ar" ? "rtl" : "ltr"}>{t.demo.empty}</p>
+      </div>
+      <dl class="result-meta" data-meta hidden>
+        <div><dt>{t.demo.model}</dt><dd data-model dir="auto"></dd></div>
+        <div><dt>{t.demo.latency}</dt><dd><span data-duration></span> ms</dd></div>
+      </dl>
+    </section>
+  </div>
+</section>
+
+<script>
+  type ErrorMap = Record<string, string>;
+  type DemoResponse = {
+    input: string;
+    output: string;
+    modelLabel: string;
+    durationMs: number;
+    requestId: string;
+  };
+
+  for (const root of document.querySelectorAll<HTMLElement>("[data-demo]")) {
+    const form = root.querySelector<HTMLFormElement>("[data-demo-form]")!;
+    const input = root.querySelector<HTMLTextAreaElement>("[data-input]")!;
+    const count = root.querySelector<HTMLOutputElement>("[data-count]")!;
+    const submit = root.querySelector<HTMLButtonElement>("[data-submit]")!;
+    const clear = root.querySelector<HTMLButtonElement>("[data-clear]")!;
+    const status = root.querySelector<HTMLElement>("[data-status]")!;
+    const result = root.querySelector<HTMLElement>("[data-result]")!;
+    const resultPanel = root.querySelector<HTMLElement>("[data-result-panel]")!;
+    const copyButton = root.querySelector<HTMLButtonElement>("[data-copy]")!;
+    const meta = root.querySelector<HTMLElement>("[data-meta]")!;
+    const model = root.querySelector<HTMLElement>("[data-model]")!;
+    const duration = root.querySelector<HTMLElement>("[data-duration]")!;
+    const errors = JSON.parse(root.dataset.errors || "{}") as ErrorMap;
+    const defaultError = root.dataset.defaultError || "Request failed.";
+    const startingMessage = root.dataset.starting || "The model is starting. The first request after an idle period takes longer.";
+    const locale = root.dataset.locale || "en";
+    const loadExampleButton = root.querySelector<HTMLButtonElement>("[data-load-example]");
+    const exampleNotice = root.querySelector<HTMLElement>("[data-example-notice]");
+    const fallbackExample = root.dataset.fallbackExample || "";
+    const exampleNoticeMessage = root.dataset.exampleNotice || "";
+    const exampleFallbackMessage = root.dataset.exampleFallback || "";
+    let latestOutput = "";
+    let controller: AbortController | null = null;
+
+    const updateCount = () => {
+      count.textContent = `${Array.from(input.value).length} ${count.dataset.countLabel || ""}`.trim();
+    };
+
+    const resetResult = () => {
+      latestOutput = "";
+      result.innerHTML = `<p class="result-placeholder" dir="${locale === "ar" ? "rtl" : "ltr"}">${locale === "ar" ? "ستظهر النتيجة هنا." : "The result will appear here."}</p>`;
+      copyButton.disabled = true;
+      meta.hidden = true;
+      status.textContent = "";
+      resultPanel.dataset.state = "empty";
+    };
+
+    input.addEventListener("input", updateCount);
+
+    type ExampleItem = { text: string };
+    let examplePool: ExampleItem[] | null = null;
+    let exampleBag: number[] = [];
+
+    async function loadExamplePool(): Promise<ExampleItem[]> {
+      if (examplePool) return examplePool;
+      const response = await fetch("/examples.json");
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+      const items = (data.items || []).filter((item: ExampleItem) => item && item.text) as ExampleItem[];
+      if (!items.length) throw new Error("empty pool");
+      examplePool = items;
+      return examplePool;
+    }
+
+    function nextExample(pool: ExampleItem[]): ExampleItem {
+      if (!exampleBag.length) {
+        exampleBag = pool.map((_, i) => i);
+        for (let i = exampleBag.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [exampleBag[i], exampleBag[j]] = [exampleBag[j], exampleBag[i]];
+        }
+      }
+      return pool[exampleBag.pop()!];
+    }
+
+    loadExampleButton?.addEventListener("click", async () => {
+      loadExampleButton.disabled = true;
+      const label = loadExampleButton.querySelector("span") ?? loadExampleButton;
+      const idleLabel = loadExampleButton.dataset.idle || label.textContent || "";
+      label.textContent = loadExampleButton.dataset.loading || idleLabel;
+      try {
+        const pool = await loadExamplePool();
+        const example = nextExample(pool);
+        input.value = example.text;
+        updateCount();
+        if (exampleNotice) exampleNotice.textContent = exampleNoticeMessage;
+      } catch {
+        input.value = fallbackExample;
+        updateCount();
+        if (exampleNotice) exampleNotice.textContent = exampleFallbackMessage;
+      } finally {
+        loadExampleButton.disabled = false;
+        label.textContent = idleLabel;
+        input.focus();
+        input.setSelectionRange(0, 0);
+        input.scrollTop = 0;
+      }
+    });
+
+    clear.addEventListener("click", () => {
+      controller?.abort();
+      input.value = "";
+      updateCount();
+      resetResult();
+      input.focus();
+    });
+
+    copyButton.addEventListener("click", async () => {
+      if (!latestOutput) return;
+      try {
+        await navigator.clipboard.writeText(latestOutput);
+        copyButton.textContent = copyButton.dataset.copiedLabel || "Copied";
+        setTimeout(() => { copyButton.textContent = copyButton.dataset.copyLabel || "Copy result"; }, 1600);
+      } catch {
+        status.textContent = locale === "ar" ? "تعذّر النسخ التلقائي. حدّد النتيجة وانسخها يدويًّا." : "Automatic copy failed. Select the result and copy it manually.";
+      }
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      controller?.abort();
+      controller = new AbortController();
+      submit.disabled = true;
+      submit.querySelector("span")!.textContent = submit.dataset.loading || "Loading…";
+      resultPanel.setAttribute("aria-busy", "true");
+      resultPanel.dataset.state = "loading";
+      status.textContent = "";
+
+      const coldStartNotice = window.setTimeout(() => {
+        if (resultPanel.dataset.state === "loading") status.textContent = startingMessage;
+      }, 10_000);
+
+      try {
+        const response = await fetch("/api/diacritize", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ text: input.value, locale }),
+          signal: controller.signal,
+        });
+        const payload = await response.json();
+        if (!response.ok) throw new Error(payload.code || "UNKNOWN");
+        const data = payload as DemoResponse;
+        latestOutput = data.output;
+        result.textContent = data.output;
+        model.textContent = data.modelLabel;
+        duration.textContent = Math.round(data.durationMs).toString();
+        meta.hidden = false;
+        copyButton.disabled = false;
+        resultPanel.dataset.state = "success";
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") return;
+        const code = error instanceof Error ? error.message : "UNKNOWN";
+        const message = errors[code] || defaultError;
+        status.textContent = message;
+        result.textContent = message;
+        latestOutput = "";
+        copyButton.disabled = true;
+        meta.hidden = true;
+        resultPanel.dataset.state = "error";
+      } finally {
+        window.clearTimeout(coldStartNotice);
+        submit.disabled = false;
+        submit.querySelector("span")!.textContent = submit.dataset.idle || "Submit";
+        resultPanel.setAttribute("aria-busy", "false");
+      }
+    });
+  }
+</script>

@@ -1,0 +1,87 @@
+---
+import "@fontsource/ibm-plex-sans/400.css";
+import "@fontsource/ibm-plex-sans/500.css";
+import "@fontsource/ibm-plex-sans/600.css";
+import "@fontsource/noto-naskh-arabic/400.css";
+import "@fontsource/noto-naskh-arabic/500.css";
+import "@fontsource/noto-naskh-arabic/600.css";
+import "@fontsource/noto-naskh-arabic/700.css";
+import "../styles/global.css";
+import type { Locale } from "../content/site";
+
+interface Props {
+  locale: Locale;
+  title: string;
+  description: string;
+  canonicalPath: string;
+  ogImage?: string;
+  noindex?: boolean;
+}
+
+const {
+  locale,
+  title,
+  description,
+  canonicalPath,
+  ogImage = locale === "ar" ? "/images/og-ar.svg" : "/images/og-en.svg",
+  noindex = false,
+} = Astro.props;
+const dir = locale === "ar" ? "rtl" : "ltr";
+const origin = Astro.site ?? new URL("https://diacritics.example");
+const canonical = new URL(canonicalPath, origin);
+const og = new URL(ogImage, origin);
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ResearchProject",
+  name: "DiacriticS",
+  description,
+  url: canonical.href,
+  inLanguage: locale,
+  about: ["Arabic diacritisation", "Arabic natural language processing", "Language models"],
+};
+---
+
+<!doctype html>
+<html lang={locale} dir={dir}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#F4EBDD" data-theme-color />
+    <meta name="color-scheme" content="light dark" />
+    <script is:inline>
+      (() => {
+        let stored = null;
+        try { stored = localStorage.getItem("diacritics-theme"); } catch {}
+        const theme = stored === "light" || stored === "dark"
+          ? stored
+          : matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.dataset.theme = theme;
+        document.querySelector("[data-theme-color]")?.setAttribute("content", theme === "dark" ? "#17140F" : "#F4EBDD");
+      })();
+    </script>
+    <meta name="description" content={description} />
+    <meta name="robots" content={noindex ? "noindex, follow" : "index, follow"} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="DiacriticS" />
+    <meta property="og:locale" content={locale === "ar" ? "ar_SA" : "en_US"} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={og} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={og} />
+    <title>{title}</title>
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">{locale === "ar" ? "انتقل إلى المحتوى" : "Skip to content"}</a>
+    <slot />
+  </body>
+</html>

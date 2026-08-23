@@ -1,0 +1,13 @@
+---
+interface Props {
+  src: string;
+  width: number;
+  height: number;
+  position?: string;
+}
+const { src, width, height, position = "center 50%" } = Astro.props;
+---
+
+<div class="section-break" style={`--break-pos:${position}`}>
+  <img src={src} alt="" width={width} height={height} loading="lazy" decoding="async" aria-hidden="true" />
+</div>

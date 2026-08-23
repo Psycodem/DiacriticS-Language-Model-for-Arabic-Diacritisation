@@ -1,0 +1,319 @@
+---
+import Footer from "./Footer.astro";
+import Header from "./Header.astro";
+import Hero from "./Hero.astro";
+import SectionBreak from "./SectionBreak.astro";
+import { copy, routeFor, shared, type Locale } from "../content/site";
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = copy[locale];
+---
+
+<Header locale={locale} />
+<main id="main-content">
+  <Hero locale={locale} />
+
+  <section class="idea section" id="idea" aria-labelledby="idea-title">
+    <div class="shell">
+      <header class="section-heading section-heading--wide content-heading">
+        <p class="eyebrow">{t.idea.label}</p>
+        <h2 id="idea-title">{t.idea.title}</h2>
+        <p class="lede">{t.idea.lede}</p>
+      </header>
+
+      <div class="idea__content">
+          <article class="ambiguity-card" aria-labelledby="ambiguity-label">
+            <p class="eyebrow" id="ambiguity-label">{t.idea.ambiguityLabel}</p>
+            <div class="ambiguity-readings">
+              {t.idea.readings.map((reading) => (
+                <div class="ambiguity-reading">
+                  <strong lang="ar" dir="rtl">{reading.word}</strong>
+                  <span>{reading.gloss}</span>
+                </div>
+              ))}
+            </div>
+            <p class="ambiguity-card__foot">{t.idea.footnote}</p>
+          </article>
+
+          <div class="idea__reasons">
+            {t.idea.reasons.map((reason) => (
+              <article>
+                <h3>{reason.title}</h3>
+                <p>{reason.body}</p>
+              </article>
+            ))}
+          </div>
+      </div>
+    </div>
+  </section>
+
+  <SectionBreak
+    src="/images/andalusian-skylight-lookup.webp"
+    width={960}
+    height={1055}
+    position="center 40%"
+  />
+
+  <section class="team section" id="team" aria-labelledby="team-title">
+    <div class="shell">
+      <header class="content-heading content-heading--compact">
+        <p class="eyebrow">{t.team.label}</p>
+        <h2 id="team-title">{t.team.title}</h2>
+        <p class="lede">{t.team.intro}</p>
+      </header>
+      <div class="team-grid">
+        {t.team.members.map((member) => (
+          <article class="team-card">
+            <p class="team-card__role">{member.role}</p>
+            <h3><a href={member.href} target="_blank" rel="noopener noreferrer">{member.name}<span aria-hidden="true"> ↗</span></a></h3>
+            <p>{member.bio}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <SectionBreak
+    src="/images/andalusian-courtyard-analysis.webp"
+    width={1600}
+    height={1067}
+    position="center 33%"
+  />
+
+  <section class="pipeline section" id="pipeline" aria-labelledby="pipeline-title">
+    <div class="shell">
+      <div class="pipeline__intro-grid">
+        <header class="content-heading">
+          <p class="eyebrow">{t.pipeline.label}</p>
+          <h2 id="pipeline-title">{t.pipeline.title}</h2>
+          <p class="lede">{t.pipeline.intro}</p>
+        </header>
+      </div>
+
+      <div class="pipeline-layout">
+        <nav class="pipeline-rail" aria-label={t.pipeline.label}>
+          <ol>
+            {t.pipeline.stages.map((stage, i) => (
+              <li><a href={`#stage-${i + 1}`} data-rail-link={i + 1}>
+                <span class="pipeline-rail__num" aria-hidden="true">{stage.number}</span>
+                <span class="pipeline-rail__title">{stage.title}</span>
+              </a></li>
+            ))}
+          </ol>
+        </nav>
+
+        <ol class="pipeline-steps">
+          {t.pipeline.stages.map((stage, i) => (
+            <li id={`stage-${i + 1}`} data-stage={i + 1}>
+              <span class="pipeline-step__number" aria-hidden="true">{stage.number}</span>
+              <div>
+                <h3>{stage.title}</h3>
+                <p>{stage.body}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      <div class="formula-block" aria-label={t.pipeline.formulaLabel}>
+        <p class="eyebrow">{t.pipeline.formulaLabel}</p>
+        {t.pipeline.formulas.map(([name, formula]) => (
+          <p class="formula"><strong dir="ltr">{name}</strong><span dir="auto">{formula}</span></p>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const links = document.querySelectorAll<HTMLAnchorElement>("[data-rail-link]");
+    const stages = document.querySelectorAll<HTMLElement>("[data-stage]");
+    if (links.length && stages.length && "IntersectionObserver" in window) {
+      const setActive = (n: string | undefined) => {
+        for (const link of links) link.classList.toggle("is-active", link.dataset.railLink === n);
+      };
+      const seen = new Map<string, number>();
+      const observer = new IntersectionObserver((entries) => {
+        for (const entry of entries) seen.set((entry.target as HTMLElement).dataset.stage!, entry.intersectionRatio);
+        let best: string | undefined; let bestRatio = 0;
+        for (const [stage, ratio] of seen) if (ratio > bestRatio) { bestRatio = ratio; best = stage; }
+        if (best) setActive(best);
+      }, { rootMargin: "-25% 0px -55% 0px", threshold: [0, 0.25, 0.5, 1] });
+      for (const stage of stages) observer.observe(stage);
+    }
+  </script>
+
+  <section class="results section" id="results" aria-labelledby="results-title">
+    <div class="shell">
+      <header class="section-heading section-heading--wide content-heading">
+        <p class="eyebrow">{t.results.label}</p>
+        <h2 id="results-title">{t.results.title}</h2>
+        <p class="lede">{t.results.intro}</p>
+      </header>
+
+      <div class="scoreboard">
+        <p class="scoreboard__label">{t.results.tableLabel}</p>
+        <div class="table-wrap" role="region" aria-label={t.results.tableRegionLabel} tabindex="0">
+          <table class="scoretable">
+            <thead>
+              <tr>
+                <th scope="col">{t.results.headers.model}</th>
+                <th scope="col"><span dir="ltr">DER</span><small>{t.results.headers.withCe}</small></th>
+                <th scope="col"><span dir="ltr">WER</span><small>{t.results.headers.withCe}</small></th>
+                <th class="col-split" scope="col"><span dir="ltr">DER</span><small>{t.results.headers.noCe}</small></th>
+                <th scope="col"><span dir="ltr">WER</span><small>{t.results.headers.noCe}</small></th>
+              </tr>
+            </thead>
+            <tbody>
+              {shared.baselineResults.map((result) => (
+                <tr class:list={{ "is-best": "best" in result && result.best }}>
+                  <th scope="row" dir="ltr">{result.model}</th>
+                  <td dir="ltr">{result.derCe}</td><td dir="ltr">{result.werCe}</td>
+                  <td class="col-split" dir="ltr">{result.derNoCe}</td><td dir="ltr">{result.werNoCe}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="scoreboard__foot">{t.results.footnote}</p>
+      </div>
+
+      <div class="findings">
+        {t.results.findings.map((finding) => (
+          <article class="finding-card">
+            <p class="eyebrow">{finding.tag}</p>
+            <h3>{finding.title}</h3>
+            <p>{finding.body}</p>
+            <div class="finding-example">
+              <strong lang="ar" dir="rtl">{finding.example}</strong>
+              <span>{finding.gloss}</span>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+
+  <section class="results section" id="finetuning" aria-labelledby="finetuning-title">
+    <div class="shell">
+      <header class="section-heading section-heading--wide content-heading">
+        <p class="eyebrow">{t.fineTuning.label}</p>
+        <h2 id="finetuning-title">{t.fineTuning.title}</h2>
+        <p class="lede">{t.fineTuning.intro}</p>
+      </header>
+
+      <div class="scoreboard">
+        <p class="scoreboard__label">{t.fineTuning.tableLabel}</p>
+        <div class="table-wrap" role="region" aria-label={t.fineTuning.tableRegionLabel} tabindex="0">
+          <table class="scoretable">
+            <thead>
+              <tr>
+                <th scope="col">{t.fineTuning.headers.model}</th>
+                <th scope="col"><span dir="ltr">DER</span><small>{t.fineTuning.headers.withCe}</small></th>
+                <th scope="col"><span dir="ltr">WER</span><small>{t.fineTuning.headers.withCe}</small></th>
+                <th class="col-split" scope="col"><span dir="ltr">DER</span><small>{t.fineTuning.headers.noCe}</small></th>
+                <th scope="col"><span dir="ltr">WER</span><small>{t.fineTuning.headers.noCe}</small></th>
+              </tr>
+            </thead>
+            <tbody>
+              {shared.fineTuningResults.map((result) => (
+                <tr class:list={{ "is-best": "best" in result && result.best }}>
+                  <th scope="row" dir="ltr">{result.model} <small>{result.data}</small></th>
+                  <td dir="ltr">{result.derCe}</td><td dir="ltr">{result.werCe}</td>
+                  <td class="col-split" dir="ltr">{result.derNoCe}</td><td dir="ltr">{result.werNoCe}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="scoreboard__foot">{t.fineTuning.footnote}</p>
+      </div>
+
+      <header class="section-heading section-heading--wide content-heading">
+        <h2>{t.fineTuning.regimeTitle}</h2>
+        <p class="lede">{t.fineTuning.regimeIntro}</p>
+      </header>
+
+      <div class="scoreboard">
+        <p class="scoreboard__label">{t.fineTuning.regimeLabel}</p>
+        <div class="table-wrap" role="region" aria-label={t.fineTuning.regimeRegionLabel} tabindex="0">
+          <table class="scoretable">
+            <thead>
+              <tr>
+                <th scope="col">{t.fineTuning.headers.model}</th>
+                <th scope="col"><span dir="ltr">DER</span><small>{t.fineTuning.headers.withCe}</small></th>
+                <th scope="col"><span dir="ltr">WER</span><small>{t.fineTuning.headers.withCe}</small></th>
+                <th class="col-split" scope="col"><span dir="ltr">DER</span><small>{t.fineTuning.headers.noCe}</small></th>
+                <th scope="col"><span dir="ltr">WER</span><small>{t.fineTuning.headers.noCe}</small></th>
+              </tr>
+            </thead>
+            <tbody>
+              {shared.regimeResults.map((result) => (
+                <tr class:list={{ "is-best": "best" in result && result.best }}>
+                  <th scope="row" dir="ltr">{result.model} <small>{result.data}</small></th>
+                  <td dir="ltr">{result.derCe}</td><td dir="ltr">{result.werCe}</td>
+                  <td class="col-split" dir="ltr">{result.derNoCe}</td><td dir="ltr">{result.werNoCe}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="scoreboard__foot">{t.fineTuning.regimeFoot}</p>
+      </div>
+
+      <div class="findings">
+        {t.fineTuning.findings.map((finding) => (
+          <article class="finding-card">
+            <p class="eyebrow">{finding.tag}</p>
+            <h3>{finding.title}</h3>
+            <p>{finding.body}</p>
+            <div class="finding-example">
+              <strong lang="ar" dir="rtl">{finding.example}</strong>
+              <span>{finding.gloss}</span>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <SectionBreak
+    src="/images/andalusian-palms-tower-band.webp"
+    width={1920}
+    height={493}
+    position="center 50%"
+  />
+
+  <section class="references section" id="references" aria-labelledby="references-title">
+    <div class="shell">
+      <header class="content-heading content-heading--compact">
+        <p class="eyebrow">{t.references.label}</p>
+        <h2 id="references-title">{t.references.title}</h2>
+      </header>
+      <div class="reference-grid">
+        {shared.references.map((reference, index) => (
+          <article class="reference-card">
+            <span aria-hidden="true">0{index + 1}</span>
+            <h3><a href={reference.href} target="_blank" rel="noopener noreferrer" dir="ltr">{reference.title}<span aria-hidden="true"> ↗</span></a></h3>
+            <p dir="ltr">{reference.meta}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="final-cta section" aria-labelledby="final-title">
+    <img class="final-cta__media" src="/images/andalusian-arch-garden-cta.webp" alt="" width="1100" height="1957" loading="lazy" decoding="async" aria-hidden="true" />
+    <div class="final-cta__veil" aria-hidden="true"></div>
+    <div class="shell final-cta__grid">
+      <div class="final-cta__copy">
+        <p class="eyebrow">{t.final.eyebrow}</p>
+        <h2 id="final-title">{t.final.title}</h2>
+        <p>{t.final.body}</p>
+        <a class="button button--primary" href={routeFor(locale, "demo")}>{t.final.cta}</a>
+      </div>
+    </div>
+  </section>
+</main>
+<Footer locale={locale} />

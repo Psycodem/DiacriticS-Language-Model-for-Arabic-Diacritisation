@@ -1,0 +1,11 @@
+---
+export const prerender = true;
+import BaseLayout from "../layouts/BaseLayout.astro";
+import HomePage from "../components/HomePage.astro";
+import { copy } from "../content/site";
+const t = copy.en;
+---
+
+<BaseLayout locale="en" title={t.meta.homeTitle} description={t.meta.homeDescription} canonicalPath="/">
+  <HomePage locale="en" />
+</BaseLayout>

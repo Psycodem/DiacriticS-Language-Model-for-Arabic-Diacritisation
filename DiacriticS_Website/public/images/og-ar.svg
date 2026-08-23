@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">DiacriticS — بحث في التشكيل الآلي للنص العربي</title>
+  <desc id="desc">بطاقة بحثية بلون بيج تحمل عبارة شكّل جملك وحركات بألوان معدنية.</desc>
+  <rect width="1200" height="630" fill="#F4EBDD"/>
+  <path d="M0 96H1200M0 534H1200" stroke="#D8BD9C"/>
+  <circle cx="110" cy="90" r="210" fill="none" stroke="#B4924E" opacity=".42"/>
+  <circle cx="1115" cy="570" r="95" fill="none" stroke="#68332A" opacity=".35"/>
+  <text x="1114" y="118" text-anchor="end" direction="rtl" font-family="IBM Plex Sans Arabic, Noto Sans Arabic, sans-serif" font-size="30" font-weight="600" fill="#68332A">بَحْثٌ فِي تَقْنِيَّاتِ اللُّغَةِ الْعَرَبِيَّةِ</text>
+  <text x="600" y="355" text-anchor="middle" direction="rtl" unicode-bidi="bidi-override" font-family="IBM Plex Sans Arabic, Noto Sans Arabic, sans-serif" font-size="132" font-weight="500" fill="#271B12">شَكِّلْ جُمَلَكَ</text>
+  <circle cx="434" cy="225" r="8" fill="#3C3B76"/>
+  <circle cx="598" cy="225" r="8" fill="#4C5627"/>
+  <circle cx="758" cy="225" r="8" fill="#68332A"/>
+  <text x="1114" y="570" text-anchor="end" direction="rtl" font-family="IBM Plex Sans Arabic, Noto Sans Arabic, sans-serif" font-size="30" fill="#271B12">نَمُوذَجٌ مُتَخَصِّصٌ فِي اللُّغَةِ الْعَرَبِيَّةِ</text>
+  <text x="86" y="570" font-family="IBM Plex Sans, sans-serif" font-size="30" font-weight="600" fill="#3C3B76">DiacriticS</text>
+</svg>
