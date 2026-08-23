@@ -7,7 +7,7 @@ Please replace the current Vercel deployment with the newer Andalusian-themed As
 Use this repository directory as the Vercel project root:
 
 ```text
-DiacriticS-Research-Experience
+DiacriticS-Website-With-Model
 ```
 
 Use the following build settings:

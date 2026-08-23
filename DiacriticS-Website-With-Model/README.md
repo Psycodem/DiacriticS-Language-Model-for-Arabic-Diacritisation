@@ -44,7 +44,7 @@ Use `DIACRITICS_MOCK_MODE=timeout` or `error` to verify failure states. Use `dis
 
 ## Vercel deployment
 
-Use `DiacriticS-Research-Experience` as the Vercel project root. The Astro Vercel adapter emits
+Use `DiacriticS-Website-With-Model` as the Vercel project root. The Astro Vercel adapter emits
 the server function with a 60-second maximum duration, which covers the measured Modal cold
 start while keeping the bearer credential on the server.
 

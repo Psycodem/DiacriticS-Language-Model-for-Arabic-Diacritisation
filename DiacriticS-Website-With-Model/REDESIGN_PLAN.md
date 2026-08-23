@@ -96,7 +96,7 @@ Consequences applied globally:
 every later phase easier to verify.
 
 ```bash
-cd DiacriticS-Research-Experience
+cd DiacriticS-Website-With-Model
 rm src/components/AnalysisSection.astro src/components/ImagePlate.astro
 ```
 
@@ -695,7 +695,7 @@ a skeleton that reads as "a line of Arabic will appear here":
 Run after **each** phase, not once at the end.
 
 ```bash
-cd DiacriticS-Research-Experience
+cd DiacriticS-Website-With-Model
 npm run build          # must exit 0 — this is the only automated gate in the repo
 ```
 
