@@ -9,6 +9,7 @@
 [![Website](https://img.shields.io/badge/Website-diacritics.vercel.app-000000.svg?logo=vercel)](https://diacritics.vercel.app/)
 [![Benchmark](https://img.shields.io/badge/Benchmark-SadeedDiac--25-yellow.svg)](https://huggingface.co/datasets/Misraj/SadeedDiac-25)
 [![Corpus](https://img.shields.io/badge/Corpus-Sadeed__Tashkeela-yellow.svg)](https://huggingface.co/datasets/Misraj/Sadeed_Tashkeela)
+[![Adapter Weights Qwen 3.5-4B](https://img.shields.io/badge/Corpus-Sadeed__Tashkeela-yellow.svg)]([https://huggingface.co/datasets/Misraj/Sadeed_Tashkeela](https://huggingface.co/Psycodem/qwen3.5-4b-lora-diacritization))
 
 <!-- To add a banner: drag an image into a GitHub issue/PR comment, copy the
      generated user-attachments URL, and paste it into the <img> tag below.
