@@ -9,6 +9,8 @@
 [![Website](https://img.shields.io/badge/Website-diacritics.vercel.app-000000.svg?logo=vercel)](https://diacritics.vercel.app/)
 [![Benchmark](https://img.shields.io/badge/Benchmark-SadeedDiac--25-yellow.svg)](https://huggingface.co/datasets/Misraj/SadeedDiac-25)
 [![Corpus](https://img.shields.io/badge/Corpus-Sadeed__Tashkeela-yellow.svg)](https://huggingface.co/datasets/Misraj/Sadeed_Tashkeela)
+[![Gemma adapters](https://img.shields.io/badge/%F0%9F%A4%97%20Adapters-gemma--4--e4b--lora-orange.svg)](https://huggingface.co/Psycodem/gemma-4-e4b-lora-diacritization)
+[![Qwen adapters](https://img.shields.io/badge/%F0%9F%A4%97%20Adapters-qwen3.5--4b--lora-orange.svg)](https://huggingface.co/Psycodem/qwen3.5-4b-lora-diacritization)
 
 <!-- To add a banner: drag an image into a GitHub issue/PR comment, copy the
      generated user-attachments URL, and paste it into the <img> tag below.
@@ -107,11 +109,12 @@ export HF_TOKEN="hf_..."   # On Windows PowerShell: $env:HF_TOKEN="hf_..."
 Evaluation_Functions_Corrected.py    # the scorer — every number in this repo uses it
 Evaluation_Scorer_Comparison.py      # runnable diff vs the benchmark's own evaluator
 Requirements.txt                     # pinned deps, annotated with what each pin prevents
+Reports/
+  DiacriticS_Final_Report.docx       # the full write-up, also served from the site
 Tested_Models/
   Tested Models Results.xlsx         # zero-shot results (MSA, CA, and mean)
   ibex_config/                       # the one benchmark that ran on Slurm
-    Gemma_Qwen_test.py
-    run_gemma_qwen_test.sbatch
+    Gemma_Qwen_test.py  run_gemma_qwen_test.sbatch
   modal_config/                      # the rest ran on Modal; these produced the numbers
     modal_small_models.py            # Fine-Tashkeel, Tashkeel-350M-v2
     modal_large_models.py            # aya-expanse-8b, Moonlight-16B-A3B-Instruct
@@ -130,14 +133,38 @@ Trained_Models/
       adapter/                       # config + model card (weights are on the Hub)
       outputs/                       # predictions, metrics, training log, loss curve
   Qwen_3_5_4B_LoRA_Diacritization/   # same shape
-DiacriticS_Website/                  # the bilingual project site (deployed on Vercel)
+  Qwen_3_5_0_8B_Full_FineTune/       # full fine-tune: notebook + outputs (weights pending)
+DiacriticS_Website/                  # Astro site with the live demo (deployed on Vercel)
+  src/  public/  astro.config.mjs
 ```
 
-Adapter weights are **not** in git — they are on the Hugging Face Hub (see
-[Performance](#performance)). Everything needed to reproduce or audit a run —
-config, per-split predictions, training log, model card — is tracked.
+Adapter weights are **not** in git — they are on the Hugging Face Hub (see below).
+Everything needed to reproduce or audit a run — config, per-split predictions,
+training log, model card — is tracked.
 
 </details>
+
+## Models on the Hub
+
+| Repo | Contents | Load with |
+|---|---|---|
+| [`Psycodem/gemma-4-e4b-lora-diacritization`](https://huggingface.co/Psycodem/gemma-4-e4b-lora-diacritization) | LoRA adapters at 10%, 30%, 50% | `subfolder="50pct"` |
+| [`Psycodem/qwen3.5-4b-lora-diacritization`](https://huggingface.co/Psycodem/qwen3.5-4b-lora-diacritization) | LoRA adapters at 10%, 30%, 50% | `subfolder="50pct"` |
+
+```python
+from peft import PeftModel
+model = PeftModel.from_pretrained(
+    model, "Psycodem/gemma-4-e4b-lora-diacritization", subfolder="50pct")
+```
+
+Each subfolder carries its own model card with that run's scores and
+hyperparameters. The full fine-tune of Qwen3.5-0.8B is documented under
+[`Trained_Models/Qwen_3_5_0_8B_Full_FineTune/`](Trained_Models/Qwen_3_5_0_8B_Full_FineTune/);
+its weights have not yet been retrieved from the training cluster.
+
+**Datasets** — [`Misraj/Sadeed_Tashkeela`](https://huggingface.co/datasets/Misraj/Sadeed_Tashkeela)
+for training, [`Misraj/SadeedDiac-25`](https://huggingface.co/datasets/Misraj/SadeedDiac-25)
+for evaluation.
 
 ## Quick Start
 
@@ -318,9 +345,17 @@ section **B**.
 
 ### E) Run the project site locally
 
+The site is an Astro app with a server-side inference proxy, so it needs Node rather than a static file server:
+
 ```bash
-python -m http.server 4173 --directory DiacriticS_Website
+cd DiacriticS_Website && npm install && npm run dev
 ```
+
+It serves on `http://localhost:4321` with English at `/` and Arabic at `/ar/`. The live demo at `/demo/` calls the same-origin `/api/diacritize` route, which forwards to a GPU endpoint; copy `.env.example` to `.env` and fill in `DIACRITICS_GPU_ENDPOINT` and `DIACRITICS_GPU_TOKEN` to enable it. Neither may carry a `PUBLIC_` prefix — Astro inlines `PUBLIC_` variables into the client bundle, which would publish the credential. Without them the rest of the site still runs; only the demo is inert.
+
+## Report
+
+The full write-up — methodology, the evaluation-protocol analysis, and the qualitative error breakdown — is at [`Reports/DiacriticS_Final_Report.docx`](Reports/DiacriticS_Final_Report.docx), and is linked from the [project site](https://diacritics.vercel.app/).
 
 ## Performance
 

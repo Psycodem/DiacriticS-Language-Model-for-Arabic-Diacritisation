@@ -71,16 +71,16 @@ export const copy = {
       support: "Fine-tuning a language model to restore Arabic's missing vowels, evaluated where it counts: on a benchmark built to resist memorisation.",
       note: "Scroll to restore the marks that written Arabic often leaves out.", primary: "Read the project", try: "Try the model",
       resources: [
-        { label: "Project report", meta: "PDF · coming soon", disabled: true },
+        { label: "Project report", meta: "Final report · DOCX", href: "/DiacriticS_Final_Report.docx" },
         { label: "Code on GitHub", meta: "Scripts, configs, results", href: shared.githubUrl, external: true },
       ] satisfies ResourceLink[],
     },
     media: {
-      hero: { credit: "Photo: Pixels Elements / Pexels" },
-      intro: { alt: "Close-up of flowing carved ornament and Arabic calligraphy on an Andalusian arch.", credit: "Photo: Daka / Pexels" },
-      method: { alt: "An ornately carved archway frames a flowering courtyard garden, with a reclining statue resting on the windowsill.", credit: "Photo: AXP Photography / Pexels" },
-      analysis: { alt: "A long reflecting pool leads through an Andalusian courtyard lined with arches and orange trees.", credit: "Photo: Igor Passchier / Pexels" },
-      final: { credit: "Photo: Daka / Pexels" }, demo: { credit: "Photo: Daka / Pexels" },
+      hero: { credit: "Artwork: diacritised Arabic set in Amiri" },
+      intro: { alt: "Arabic words shown with their full diacritics.", credit: "Artwork: diacritised Arabic set in Amiri" },
+      method: { alt: "An ornately carved archway frames a flowering courtyard garden, with a reclining statue resting on the windowsill.", credit: "Artwork: diacritised Arabic set in Amiri" },
+      analysis: { alt: "Arabic words shown with their full diacritics.", credit: "Artwork: diacritised Arabic set in Amiri" },
+      final: { credit: "Artwork: diacritised Arabic set in Amiri" }, demo: { credit: "Artwork: diacritised Arabic set in Amiri" },
     },
     idea: {
       label: "01 · Comprehension", title: "One skeleton, many meanings",
@@ -150,7 +150,7 @@ export const copy = {
     },
     references: { label: "06 · Grounding", title: "References" },
     final: { eyebrow: "From report to interaction", title: "Put Arabic text in. Inspect what the model returns.", body: "The local interface exposes the product behavior while the secure proxy keeps model credentials off the page.", cta: "Try the model" },
-    footer: { note: "DiacriticS: a KAUST Academy research project on contamination-controlled Arabic diacritisation.", photoCredit: "Photos: Pixels Elements, Dark Astraal, Igor Passchier, AXP Photography, and Daka / Pexels.", authors: "Youssef S. Mohamed (KAUST) · Mahdi Alkhamis (IAU) · Mohammad Alali (KFUPM) · Saad Alnafjan (KAU)", repo: "Code on GitHub" },
+    footer: { note: "DiacriticS: a KAUST Academy research project on contamination-controlled Arabic diacritisation.", photoCredit: "Artwork generated from diacritised Arabic vocabulary; set in Amiri.", authors: "Youssef S. Mohamed (KAUST) · Mahdi Alkhamis (IAU) · Mohammad Alali (KFUPM) · Saad Alnafjan (KAU)", repo: "Code on GitHub" },
     demo: {
       eyebrow: "Interactive interface", title: "Try DiacriticS", inputLabel: "Arabic input", inputHint: "Maximum: 383 model tokens (typically about 1,130 Arabic characters). The exact character count depends on tokenization.", placeholder: "اكتب نصا عربيا من دون تشكيل", examplesLabel: "Try a real example", examples: ["اللغة العربية جميلة", "يكتب الباحث نتائج التجربة", "هذا نموذج متخصص في اللغة العربية"], loadExample: "Load an example", loadingExample: "Loading…", exampleNotice: "A held-out passage from the Sadeed_Tashkeela test split, never used to train this model.", exampleFallback: "Could not load the test-split passages; showing a built-in example.", submit: "Add tashkeel", submitting: "Adding tashkeel…", cancel: "Cancel", before: "Before", after: "After", empty: "The result will appear here.", emptyExampleLabel: "One skeleton, three readings", copy: "Copy result", copied: "Copied", clear: "Clear", removeInput: "Clear input", charsRemaining: "characters remaining", charsOver: "characters over the limit", count: "characters · 383-token limit", starting: "The GPU is starting. The first request after an idle period may take about 44 seconds.", errorDefault: "The request could not be completed. Please try again.",
       errors: { EMPTY_TEXT: "Enter Arabic text before submitting.", TEXT_TOO_LONG: "This text exceeds the model’s 383-token context. Shorten it and try again.", UNSUPPORTED_TEXT: "Enter Arabic text rather than an empty or technical payload.", MODEL_NOT_CONFIGURED: "The local proxy is working, but this input is not part of the curated mock. Connect the GPU endpoint to test arbitrary text.", RATE_LIMITED: "Too many requests. Wait a moment and try again.", UPSTREAM_TIMEOUT: "The model took too long to respond. Try again.", UPSTREAM_ERROR: "The model endpoint returned an error. Try again later.", MODEL_AUTH_ERROR: "The model connection needs its server credential refreshed." }, model: "Model", latency: "Response", back: "Back to the research",
@@ -163,12 +163,12 @@ export const copy = {
     hero: {
       eyebrow: "بحثٌ في تقنيات اللغة العربية · DiacriticS", brandLabel: "داياكريتِكس", caption: "تشكيل · العلامات التي تحمل المعنى", support: "ضبط دقيق لنموذج لغوي لاستعادة الحركات العربية المفقودة، بتقييم صارم على معيار صُمم ليقاوم الحفظ والتلوث.", note: "مرّر الصفحة لتعود الحركات إلى مواضعها.", primary: "اقرأ عن المشروع", try: "جَرِّبِ النَّمُوذَجَ",
       resources: [
-        { label: "تقرير المشروع", meta: "ملف PDF · قريبًا", disabled: true },
+        { label: "تقرير المشروع", meta: "التقرير النهائي · ملف DOCX", href: "/DiacriticS_Final_Report.docx" },
         { label: "الشيفرة على GitHub", meta: "السكربتات والإعدادات والنتائج", href: shared.githubUrl, external: true },
       ] satisfies ResourceLink[],
     },
     media: {
-      hero: { credit: "تصوير: Pixels Elements / Pexels" }, intro: { alt: "تفصيل قريب لزخارف نباتية وكتابة عربية منحوتة على قوس أندلسي.", credit: "تصوير: Daka / Pexels" }, method: { alt: "قوس منحوت بزخارف دقيقة يؤطر حديقة أندلسية مزهرة، وتمثال متكئ على حافة النافذة.", credit: "تصوير: AXP Photography / Pexels" }, analysis: { alt: "حوض عاكس طويل يمتد عبر فناء أندلسي تحيط به الأقواس وأشجار النارنج.", credit: "تصوير: Igor Passchier / Pexels" }, final: { credit: "تصوير: Daka / Pexels" }, demo: { credit: "تصوير: Daka / Pexels" },
+      hero: { credit: "عمل فني: نص عربي مُشكَّل بخط أميري" }, intro: { alt: "كلمات عربية معروضة بتشكيلها الكامل.", credit: "عمل فني: نص عربي مُشكَّل بخط أميري" }, method: { alt: "كلمات عربية معروضة بتشكيلها الكامل.", credit: "عمل فني: نص عربي مُشكَّل بخط أميري" }, analysis: { alt: "كلمات عربية معروضة بتشكيلها الكامل.", credit: "عمل فني: نص عربي مُشكَّل بخط أميري" }, final: { credit: "عمل فني: نص عربي مُشكَّل بخط أميري" }, demo: { credit: "عمل فني: نص عربي مُشكَّل بخط أميري" },
     },
     idea: {
       label: "01 · الفكرة", title: "هيكل واحد، معانٍ كثيرة", lede: "تُنشر العربية غالبًا بلا حركات: الحروف الساكنة والحروف المدّية فقط، بينما تُحذف الحركات القصيرة وعلامات الإعراب. هيكل واحد من الحروف قد يخفي كلمات مختلفة تمامًا في المعنى.", ambiguityLabel: "نفس الحروف الثلاثة: ع ل م", readings: [{ word: "عَلَمٌ", gloss: "عَلَم" }, { word: "عِلْمٌ", gloss: "عِلْم" }, { word: "عَلَّمَ", gloss: "فِعل التعليم" }], footnote: "ثلاث قراءات مختلفة، ولا فرق بينها على الصفحة دون الحركات.",
@@ -227,7 +227,7 @@ export const copy = {
     },
     references: { label: "06 · المصادر", title: "المراجع" },
     final: { eyebrow: "مِنَ التَّقْرِيرِ إِلَى التَّجْرِبَةِ", title: "أَدْخِلْ نَصًّا عَرَبِيًّا، وَتَفَحَّصِ النَّتِيجَةَ.", body: "تعرض الواجهة سلوك المنتج، بينما تُبقي طبقة الخادم مفاتيح النموذج بعيدًا عن المتصفح.", cta: "جَرِّبِ النَّمُوذَجَ" },
-    footer: { note: "داياكريتِكس: مشروع بحثي من أكاديمية كاوست حول التشكيل العربي بمعايير خالية من التلوث.", photoCredit: "الصور: Pixels Elements وDark Astraal وIgor Passchier وAXP Photography وDaka / Pexels.", authors: "Youssef S. Mohamed (KAUST) · Mahdi Alkhamis (IAU) · Mohammad Alali (KFUPM) · Saad Alnafjan (KAU)", repo: "الشيفرة على GitHub" },
+    footer: { note: "داياكريتِكس: مشروع بحثي من أكاديمية كاوست حول التشكيل العربي بمعايير خالية من التلوث.", photoCredit: "عمل فني مولَّد من مفردات عربية مُشكَّلة، بخط أميري.", authors: "Youssef S. Mohamed (KAUST) · Mahdi Alkhamis (IAU) · Mohammad Alali (KFUPM) · Saad Alnafjan (KAU)", repo: "الشيفرة على GitHub" },
     demo: {
       eyebrow: "واجهة تفاعلية", title: "جَرِّبْ DiacriticS", inputLabel: "النصّ العربي", inputHint: "الحد الأقصى 383 رمزًا للنموذج (نحو 1,130 محرفًا عربيًّا عادةً)، ويختلف العدد الدقيق باختلاف التجزئة.", placeholder: "اكتب نصا عربيا من دون تشكيل", examplesLabel: "جرّب مثالًا حقيقيًا", examples: ["اللغة العربية جميلة", "يكتب الباحث نتائج التجربة", "هذا نموذج متخصص في اللغة العربية"], loadExample: "حمّل مثالًا", loadingExample: "جارٍ التحميل…", exampleNotice: "فقرة من قسم الاختبار في Sadeed_Tashkeela، لم يتدرّب عليها النموذج قط.", exampleFallback: "تعذّر تحميل فقرات قسم الاختبار؛ تم عرض مثال مدمج.", submit: "أَضِفِ التَّشْكِيلَ", submitting: "تَجْرِي إِضَافَةُ التَّشْكِيلِ…", cancel: "إلغاء", before: "قبل", after: "بعد", empty: "ستظهر النتيجة هنا.", emptyExampleLabel: "هيكل واحد، ثلاث قراءات", copy: "انسخ النتيجة", copied: "تم النسخ", clear: "امسح", removeInput: "مسح النص", charsRemaining: "حرفًا متبقيًا", charsOver: "حرفًا زيادة عن الحد", count: "محرف · الحد 383 رمزًا", starting: "يجري تشغيل وحدة GPU. قد يستغرق أول طلب بعد فترة خمول نحو 44 ثانية.", errorDefault: "تعذّر إكمال الطلب. حاول مرة أخرى.", errors: { EMPTY_TEXT: "أدخل نصًّا عربيًّا أولًا.", TEXT_TOO_LONG: "يتجاوز النص سياق النموذج البالغ 383 رمزًا. اختصره ثم حاول مرة أخرى.", UNSUPPORTED_TEXT: "أدخل نصًّا عربيًّا صالحًا.", MODEL_NOT_CONFIGURED: "طبقة الخادم المحلية تعمل، لكن هذا النص ليس من الأمثلة المحدّدة. اربط نقطة GPU لتجربة أي نص.", RATE_LIMITED: "طلبات كثيرة خلال وقت قصير. انتظر قليلًا ثم حاول.", UPSTREAM_TIMEOUT: "استغرق النموذج وقتًا طويلًا. حاول مرة أخرى.", UPSTREAM_ERROR: "أعادت نقطة النموذج خطأً. حاول لاحقًا.", MODEL_AUTH_ERROR: "يحتاج اتصال النموذج إلى تحديث بيانات اعتماد الخادم." }, model: "النموذج", latency: "زمن الاستجابة", back: "العودة إلى البحث",
     },
