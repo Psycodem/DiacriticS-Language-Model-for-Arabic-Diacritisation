@@ -9,8 +9,12 @@
 [![Website](https://img.shields.io/badge/Website-diacritics.vercel.app-000000.svg?logo=vercel)](https://diacritics.vercel.app/)
 [![Benchmark](https://img.shields.io/badge/Benchmark-SadeedDiac--25-yellow.svg)](https://huggingface.co/datasets/Misraj/SadeedDiac-25)
 [![Corpus](https://img.shields.io/badge/Corpus-Sadeed__Tashkeela-yellow.svg)](https://huggingface.co/datasets/Misraj/Sadeed_Tashkeela)
+<<<<<<< HEAD
 [![Gemma adapters](https://img.shields.io/badge/%F0%9F%A4%97%20Adapters-gemma--4--e4b--lora-orange.svg)](https://huggingface.co/Psycodem/gemma-4-e4b-lora-diacritization)
 [![Qwen adapters](https://img.shields.io/badge/%F0%9F%A4%97%20Adapters-qwen3.5--4b--lora-orange.svg)](https://huggingface.co/Psycodem/qwen3.5-4b-lora-diacritization)
+=======
+[![Adapter Weights Qwen 3.5-4B](https://img.shields.io/badge/Corpus-Sadeed__Tashkeela-yellow.svg)]([https://huggingface.co/datasets/Misraj/Sadeed_Tashkeela](https://huggingface.co/Psycodem/qwen3.5-4b-lora-diacritization))
+>>>>>>> 37e342d3d2f3e5b6881272a37568b129bfb0a2b9
 
 <!-- To add a banner: drag an image into a GitHub issue/PR comment, copy the
      generated user-attachments URL, and paste it into the <img> tag below.
