@@ -110,7 +110,7 @@ Evaluation_Functions_Corrected.py    # the scorer — every number in this repo 
 Evaluation_Scorer_Comparison.py      # runnable diff vs the benchmark's own evaluator
 Requirements.txt                     # pinned deps, annotated with what each pin prevents
 Reports/
-  DiacriticS_Final_Report.docx       # the full write-up, also served from the site
+  DiacriticS_Final_Report.pdf        # the full write-up, also served from the site
 Tested_Models/
   Tested Models Results.xlsx         # zero-shot results (MSA, CA, and mean)
   ibex_config/                       # the one benchmark that ran on Slurm
