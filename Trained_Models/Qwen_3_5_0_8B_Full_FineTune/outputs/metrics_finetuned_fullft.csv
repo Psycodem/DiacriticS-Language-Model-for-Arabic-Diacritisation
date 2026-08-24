@@ -1,0 +1,7 @@
+﻿model,method,split,n_examples,n_empty_predictions,n_truncated,DER_ce_corr,DER_noce_corr,WER_ce_corr,WER_noce_corr,DER_ce,DER_noce,WER_ce,WER_noce,skeleton_mismatch_rate
+/scratch/runs/qwen3.5-0.8b-fullft/final_model,ft,ft_train,500,0,4,0.94,0.83,2.28,1.47,1.16,0.99,2.26,1.46,0.8
+/scratch/runs/qwen3.5-0.8b-fullft/final_model,ft,ft_test,2485,0,47,2.52,1.91,5.62,2.75,2.86,2.1,5.58,2.71,1.93
+/scratch/runs/qwen3.5-0.8b-fullft/final_model,ft,ft_benchmark_sadeeddiac25_pooled,1200,0,0,3.36,2.95,7.64,4.38,3.69,2.93,7.35,4.09,9.17
+/scratch/runs/qwen3.5-0.8b-fullft/final_model,ft,ft_benchmark_sadeeddiac25_CA,600,0,0,1.33,0.73,4.28,1.47,1.61,0.88,4.27,1.47,0.17
+/scratch/runs/qwen3.5-0.8b-fullft/final_model,ft,ft_benchmark_sadeeddiac25_MSA,600,0,0,4.79,4.43,10.4,6.78,5.25,4.41,9.9,6.25,18.17
+/scratch/runs/qwen3.5-0.8b-fullft/final_model,ft,ft_benchmark_sadeeddiac25_MACRO_MEAN,1200,0,0,3.06,2.58,7.34,4.12,3.43,2.65,7.08,3.86,9.17

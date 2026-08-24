@@ -1,4 +1,8 @@
 :root {
+  --display-en: "Fraunces", Georgia, serif;
+  --body-en: "Source Serif 4", Georgia, serif;
+  --display-ar: "Amiri", "Noto Naskh Arabic", serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
   --canvas: #f4ebdd;
   --surface: #fffcf6;
   --sand: #e7d2a6;
@@ -71,13 +75,13 @@ body {
   min-width: 20rem;
   background: var(--canvas);
   color: var(--ink);
-  font-family: "IBM Plex Sans", system-ui, sans-serif;
+  font-family: "Source Serif 4", Georgia, serif;
   font-size: var(--step-0);
   line-height: 1.65;
 }
 
 html[dir="rtl"] body {
-  font-family: "Noto Naskh Arabic", serif;
+  font-family: "Amiri", "Noto Naskh Arabic", serif;
   line-height: 1.9;
 }
 
@@ -308,7 +312,7 @@ html[dir="rtl"] .lede {
 
 .wordmark__mark {
   color: var(--red);
-  font-family: "Noto Naskh Arabic", serif;
+  font-family: "Amiri", "Noto Naskh Arabic", serif;
   font-size: 1.7rem;
   line-height: 1;
   transform: translateY(-0.18em);
@@ -384,7 +388,7 @@ html[dir="rtl"] .lede {
   border: 1px solid var(--rule-strong);
   border-radius: 999px;
   padding: 0.4rem 0.75rem;
-  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-family: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   font-size: 0.72rem;
   letter-spacing: 0.05em;
   text-decoration: none;
@@ -534,7 +538,7 @@ html[dir="rtl"] .lede {
   position: relative;
   width: 100%;
   padding-block: 0.22em 0.06em;
-  font-family: "Noto Naskh Arabic", serif;
+  font-family: "Amiri", "Noto Naskh Arabic", serif;
   font-size: calc(var(--step-display) * 0.9);
   font-weight: 400;
   line-height: 1.38;
@@ -778,7 +782,7 @@ html[dir="rtl"] .signature__support {
 
 .ambiguity-reading strong {
   color: var(--blue);
-  font-family: "Noto Naskh Arabic", serif;
+  font-family: "Amiri", "Noto Naskh Arabic", serif;
   font-size: clamp(2rem, 4vw, 3.1rem);
   font-weight: 500;
   line-height: 1.5;
@@ -1159,7 +1163,7 @@ html[dir="rtl"] .finding-card + .finding-card {
 
 .finding-example strong {
   color: var(--blue);
-  font-family: "Noto Naskh Arabic", serif;
+  font-family: "Amiri", "Noto Naskh Arabic", serif;
   font-size: var(--step-1);
   font-weight: 500;
   line-height: 1.8;
@@ -1505,7 +1509,7 @@ html[dir="rtl"] .demo-back span {
   color: var(--ink);
   outline: 0;
   background: color-mix(in srgb, var(--canvas) 72%, var(--surface));
-  font-family: "Noto Naskh Arabic", serif;
+  font-family: "Amiri", "Noto Naskh Arabic", serif;
   font-size: clamp(1.15rem, 2vw, 1.5rem);
   line-height: 1.9;
   transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
@@ -1557,7 +1561,7 @@ html[dir="rtl"] .demo-back span {
 }
 
 .example-chip {
-  font-family: "Noto Naskh Arabic", serif;
+  font-family: "Amiri", "Noto Naskh Arabic", serif;
 }
 
 .example-chip:hover,
@@ -1622,7 +1626,7 @@ html[dir="rtl"] .demo-back span {
   align-content: center;
   overflow-wrap: anywhere;
   padding-block: var(--space-3);
-  font-family: "Noto Naskh Arabic", serif;
+  font-family: "Amiri", "Noto Naskh Arabic", serif;
   /* Keeps the result at ~1.3x the input beside it; at 2x it outgrew the column
      and a full-length paragraph overran the form's height. */
   font-size: clamp(1.5rem, 2.6vw, 1.95rem);
@@ -1705,7 +1709,7 @@ html[dir="rtl"] .demo-back span {
 
 .not-found__mark {
   color: var(--red);
-  font-family: "Noto Naskh Arabic", serif;
+  font-family: "Amiri", "Noto Naskh Arabic", serif;
   font-size: clamp(6rem, 20vw, 15rem);
   line-height: 0.65;
 }
@@ -1718,7 +1722,7 @@ html[dir="rtl"] .demo-back span {
 
 .not-found > p:not(.eyebrow) {
   color: var(--muted);
-  font-family: "Noto Naskh Arabic", serif;
+  font-family: "Amiri", "Noto Naskh Arabic", serif;
   font-size: var(--step-1);
 }
 
@@ -2135,3 +2139,17 @@ html[dir="rtl"] .demo-back span {
     background: transparent;
   }
 }
+
+/* Display serif on headings, matching the previous site. */
+h1, h2, h3 {
+  font-family: var(--display-en);
+}
+:root[data-lang="ar"] h1,
+:root[data-lang="ar"] h2,
+:root[data-lang="ar"] h3 {
+  font-family: var(--display-ar);
+}
+
+/* Render every numeral in Latin form, in both languages. */
+:root[data-lang="ar"] { font-variant-numeric: lining-nums; }
+[lang="ar"], [dir="rtl"] { -moz-font-feature-settings: "lnum"; }
