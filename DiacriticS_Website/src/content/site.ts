@@ -71,7 +71,7 @@ export const copy = {
       support: "Fine-tuning a language model to restore Arabic's missing vowels, evaluated where it counts: on a benchmark built to resist memorisation.",
       note: "Scroll to restore the marks that written Arabic often leaves out.", primary: "Read the project", try: "Try the model",
       resources: [
-        { label: "Project report", meta: "Final report · DOCX", href: "/DiacriticS_Final_Report.docx" },
+        { label: "Project report", meta: "Final report · PDF", href: "/DiacriticS_Final_Report.pdf" },
         { label: "Code on GitHub", meta: "Scripts, configs, results", href: shared.githubUrl, external: true },
       ] satisfies ResourceLink[],
     },
@@ -163,7 +163,7 @@ export const copy = {
     hero: {
       eyebrow: "بحثٌ في تقنيات اللغة العربية · DiacriticS", brandLabel: "داياكريتِكس", caption: "تشكيل · العلامات التي تحمل المعنى", support: "ضبط دقيق لنموذج لغوي لاستعادة الحركات العربية المفقودة، بتقييم صارم على معيار صُمم ليقاوم الحفظ والتلوث.", note: "مرّر الصفحة لتعود الحركات إلى مواضعها.", primary: "اقرأ عن المشروع", try: "جَرِّبِ النَّمُوذَجَ",
       resources: [
-        { label: "تقرير المشروع", meta: "التقرير النهائي · ملف DOCX", href: "/DiacriticS_Final_Report.docx" },
+        { label: "تقرير المشروع", meta: "التقرير النهائي · ملف PDF", href: "/DiacriticS_Final_Report.pdf" },
         { label: "الشيفرة على GitHub", meta: "السكربتات والإعدادات والنتائج", href: shared.githubUrl, external: true },
       ] satisfies ResourceLink[],
     },

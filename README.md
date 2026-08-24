@@ -9,12 +9,8 @@
 [![Website](https://img.shields.io/badge/Website-diacritics.vercel.app-000000.svg?logo=vercel)](https://diacritics.vercel.app/)
 [![Benchmark](https://img.shields.io/badge/Benchmark-SadeedDiac--25-yellow.svg)](https://huggingface.co/datasets/Misraj/SadeedDiac-25)
 [![Corpus](https://img.shields.io/badge/Corpus-Sadeed__Tashkeela-yellow.svg)](https://huggingface.co/datasets/Misraj/Sadeed_Tashkeela)
-<<<<<<< HEAD
 [![Gemma adapters](https://img.shields.io/badge/%F0%9F%A4%97%20Adapters-gemma--4--e4b--lora-orange.svg)](https://huggingface.co/Psycodem/gemma-4-e4b-lora-diacritization)
 [![Qwen adapters](https://img.shields.io/badge/%F0%9F%A4%97%20Adapters-qwen3.5--4b--lora-orange.svg)](https://huggingface.co/Psycodem/qwen3.5-4b-lora-diacritization)
-=======
-[![Adapter Weights Qwen 3.5-4B](https://img.shields.io/badge/Corpus-Sadeed__Tashkeela-yellow.svg)]([https://huggingface.co/datasets/Misraj/Sadeed_Tashkeela](https://huggingface.co/Psycodem/qwen3.5-4b-lora-diacritization))
->>>>>>> 37e342d3d2f3e5b6881272a37568b129bfb0a2b9
 
 <!-- To add a banner: drag an image into a GitHub issue/PR comment, copy the
      generated user-attachments URL, and paste it into the <img> tag below.
@@ -28,9 +24,9 @@
 ## Highlights
 
 - **Contamination-controlled by construction** — trained on Sadeed-Tashkeela, evaluated on SadeedDiac-25, with only **0.4% overlap** between the training corpus and the Fadel test set it is scored against
-- **11 open-weights models benchmarked zero-shot**, scored on the mean of the Modern Standard and Classical Arabic halves of the benchmark
-- **LoRA only — no QLoRA, no full-weight retraining**, under an explicit fairness contract that holds every optimisation-relevant hyperparameter identical across models
-- **4-point data-scaling curve** (10/30/50%) over *nested* subsets, so the points form a curve rather than four unrelated samples
+- **12 open-weights models benchmarked zero-shot**, scored on the mean of the Modern Standard and Classical Arabic halves of the benchmark
+- **LoRA under an explicit fairness contract** that holds every optimisation-relevant hyperparameter identical across both 4B models — plus one full fine-tune of Qwen3.5-0.8B, so the adaptation regime itself can be compared with the base model, corpus and prompt held constant
+- **4-point data-scaling curve** (zero-shot, then 10/30/50%) over *nested* subsets — the 10% slice sits inside the 30% and that inside the 50% — so the points form a curve rather than four unrelated samples
 - **Corrected DER/WER scorer** — NFC normalisation, letter-anchored mark comparison, reference-fixed denominator, hallucinated words counted, dagger alef included
 - **Bilingual project site** (English / Arabic)
 
@@ -359,7 +355,7 @@ It serves on `http://localhost:4321` with English at `/` and Arabic at `/ar/`. T
 
 ## Report
 
-The full write-up — methodology, the evaluation-protocol analysis, and the qualitative error breakdown — is at [`Reports/DiacriticS_Final_Report.docx`](Reports/DiacriticS_Final_Report.docx), and is linked from the [project site](https://diacritics.vercel.app/).
+The full write-up — methodology, the evaluation-protocol analysis, and the qualitative error breakdown — is at [`Reports/DiacriticS_Final_Report.pdf`](Reports/DiacriticS_Final_Report.pdf), and is linked from the [project site](https://diacritics.vercel.app/).
 
 ## Performance
 
