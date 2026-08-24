@@ -1,0 +1,5 @@
+﻿model,method,split,n_examples,n_empty_predictions,n_truncated,DER_ce_corr,DER_noce_corr,WER_ce_corr,WER_noce_corr,DER_ce,DER_noce,WER_ce,WER_noce,skeleton_mismatch_rate
+/scratch/runs/qwen3.5-0.8b-lora-r16-eb96-contract-v1/final_model,final,final_benchmark_sadeeddiac25_pooled,1200,0,0,4.68,4.37,9.53,6.03,4.83,4.09,9.01,5.48,16.0
+/scratch/runs/qwen3.5-0.8b-lora-r16-eb96-contract-v1/final_model,final,final_benchmark_sadeeddiac25_CA,600,0,0,1.61,1.01,4.94,1.94,1.95,1.18,4.92,1.92,0.67
+/scratch/runs/qwen3.5-0.8b-lora-r16-eb96-contract-v1/final_model,final,final_benchmark_sadeeddiac25_MSA,600,0,0,6.82,6.6,13.29,9.37,6.99,6.18,12.38,8.41,31.33
+/scratch/runs/qwen3.5-0.8b-lora-r16-eb96-contract-v1/final_model,final,final_benchmark_sadeeddiac25_MACRO_MEAN,1200,0,0,4.21,3.8,9.12,5.65,4.47,3.68,8.65,5.17,16.0

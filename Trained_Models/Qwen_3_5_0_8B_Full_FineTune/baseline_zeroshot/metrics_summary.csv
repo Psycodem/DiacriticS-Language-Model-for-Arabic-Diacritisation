@@ -1,0 +1,5 @@
+﻿model,method,split,n_examples,n_empty_predictions,n_truncated,DER_ce_corr,DER_noce_corr,WER_ce_corr,WER_noce_corr,DER_ce,DER_noce,WER_ce,WER_noce,skeleton_mismatch_rate
+base,base,base_benchmark_sadeeddiac25_pooled,1200,0,498,92.04,92.19,99.63,99.57,99.91,99.85,99.15,99.03,70.67
+base,base,base_benchmark_sadeeddiac25_CA,600,0,0,92.03,92.6,99.76,99.68,99.89,99.82,99.52,99.37,60.5
+base,base,base_benchmark_sadeeddiac25_MSA,600,0,0,92.05,91.95,99.54,99.5,99.93,99.88,98.85,98.75,80.83
+base,base,base_benchmark_sadeeddiac25_MACRO_MEAN,1200,0,498,92.04,92.28,99.65,99.59,99.91,99.85,99.19,99.06,70.66

@@ -1,0 +1,4 @@
+model,method,split,n_examples,DER_ce,DER_noce,WER_ce,WER_noce,skeleton_mismatch_rate,decode
+aubmindlab/bert-base-arabertv02,tagging_arabert,CA,600,4.70,4.20,14.12,9.57,0.0,orphan-mask fix applied
+aubmindlab/bert-base-arabertv02,tagging_arabert,MSA,600,16.49,17.58,42.06,37.52,0.0,orphan-mask fix applied
+aubmindlab/bert-base-arabertv02,tagging_arabert,MACRO_MEAN,1200,10.59,10.89,28.09,23.55,0.0,orphan-mask fix applied

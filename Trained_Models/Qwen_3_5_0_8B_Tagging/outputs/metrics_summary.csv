@@ -1,0 +1,5 @@
+model,method,split,n_examples,n_truncated,DER_ce,DER_noce,WER_ce,WER_noce,skeleton_mismatch_rate
+/scratch/runs/qwen-tagging-fullepoch/final_model,tagging_qwen_doublepass,CA,600,,1.22,0.65,4.17,1.43,0.0
+/scratch/runs/qwen-tagging-fullepoch/final_model,tagging_qwen_doublepass,MSA,600,,3.92,3.49,12.02,8.21,0.0
+/scratch/runs/qwen-tagging-fullepoch/final_model,tagging_qwen_doublepass,pooled,1200,0,2.8,2.34,8.46,5.14,0.0
+/scratch/runs/qwen-tagging-fullepoch/final_model,tagging_qwen_doublepass,MACRO_MEAN,1200,,2.57,2.07,8.09,4.82,0.0

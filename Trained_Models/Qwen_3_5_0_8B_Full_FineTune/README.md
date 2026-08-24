@@ -92,15 +92,27 @@ did not consume the full epoch it was configured for.
 
 ## Files here
 
+Laid out to match the `Gemma_4_LoRA_Diacritization/` and `Qwen_3_5_4B_LoRA_Diacritization/`
+folders. There is no `adapter/` subfolder — this is a full fine-tune, not LoRA — and no
+`10pct`/`30pct`/`50pct` rungs, because it was trained once on the full corpus.
+
 | Path | What |
 |---|---|
-| `Qwen3.5-0.8B_Full-FineTune_Diacritization.ipynb` | the training and evaluation notebook |
-| `outputs/metrics_finetuned_fullft.csv` | scored splits, both scorer generations |
-| `outputs/metrics_baseline_zeroshot.csv` | the untrained baseline |
-| `outputs/predictions_sadeeddiac25_finetuned.csv` | all 1,200 benchmark predictions |
-| `outputs/predictions_sadeeddiac25_baseline.csv` | the same, before training |
-| `outputs/training_log.csv`, `outputs/loss_curve.png` | training trace |
+| `Train_FullFT_Qwen_3_5_0_8B_Diacritization.py` | the training + evaluation script |
+| `Qwen3.5-0.8B_Full-FineTune_Diacritization.ipynb` | the same run as a notebook |
+| `modal_config/Modal_Train_Qwen3.5_0.8B_FullFT.py` | Modal image, Volume, CPU prep, GPU train/eval |
+| `outputs/metrics_summary.csv` | scored splits, both scorer generations |
+| `outputs/benchmark_sadeeddiac25_predictions.csv` | all 1,200 benchmark predictions |
+| `outputs/training_log.csv`, `outputs/train_test_loss_curve.png` | training trace |
+| `outputs/run_config.json` | every hyperparameter as actually applied |
 | `outputs/corpus_composition.csv` | what the training mix contained |
+| `outputs/performance_comparison.png` | fine-tuned vs baseline chart |
+| `baseline_zeroshot/metrics_summary.csv` | the untrained baseline |
+| `baseline_zeroshot/benchmark_sadeeddiac25_predictions.csv` | the same 1,200 rows, before training |
+
+The zero-shot baseline moved into its own `baseline_zeroshot/` folder so that each folder holds
+exactly one model's results, matching how the sibling folders separate their rungs. It is the
+honest comparison for the fine-tune: same prompt, same `enable_thinking=False`, same NFC scoring.
 
 The metrics CSVs carry **two sets of columns**: `*_corr` from the corrected
 scorer (the figures quoted above and in the report) and unsuffixed columns from
@@ -108,9 +120,10 @@ the older frozen scorer, kept only for continuity. Cite the `_corr` values.
 
 ## Weights
 
-The weights are **not in this repository and are not yet on the Hub** — they were
-written to `/scratch/runs/qwen3.5-0.8b-fullft/` on the training cluster and have
-not been retrieved. A full fine-tune of a 0.8B model is roughly 1.6 GB in bf16,
+The weights are **not in this repository and are not on the Hub** — see
+[`HUGGINGFACE.md`](HUGGINGFACE.md). They live on the Modal Volume `diacritics-scratch` at
+`runs/qwen3.5-0.8b-fullft/`, and a local copy of the best checkpoint (step 4,070) exists in the
+untracked `Train-Qwen-0.8B-Full-FT/` package. A full fine-tune of a 0.8B model is roughly 1.6 GB in bf16,
 well past GitHub's 100 MB file limit, so the Hub is where they belong once
 available. The LoRA adapters for the 4B models are already published:
 

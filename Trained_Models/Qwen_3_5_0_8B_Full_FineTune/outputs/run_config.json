@@ -1,0 +1,30 @@
+{
+  "base_model": "Qwen/Qwen3.5-0.8B",
+  "checkpoint_provenance": {
+    "weights_are": "best_checkpoint",
+    "best_model_checkpoint": "/scratch/runs/qwen3.5-0.8b-fullft/checkpoint-4070",
+    "best_eval_loss": 0.10725194215774536,
+    "best_global_step": 4070,
+    "final_global_step": 16293
+  },
+  "method": "full_fine_tune",
+  "chat_mode": true,
+  "epochs": 1.0,
+  "max_steps": -1,
+  "planned_total_steps": 16293,
+  "lr": 2e-05,
+  "lr_scheduler": "cosine",
+  "warmup_ratio": 0.03,
+  "weight_decay": 0.01,
+  "max_grad_norm": 1.0,
+  "max_seq_length": 1024,
+  "effective_batch": 64,
+  "gradient_checkpointing": false,
+  "master_dtype": "float32",
+  "autocast": "bfloat16",
+  "seed": 42,
+  "train_dataset": "Misraj/Sadeed_Tashkeela",
+  "train_dataset_revision": "c10bcbb3b50dc96551f62c472389de666a8c1c4e",
+  "benchmark_dataset_revision": "aa311213e44e4cab6cc3f2848daacd753adc1ce1",
+  "enable_thinking": false
+}

@@ -1,0 +1,5 @@
+﻿model,method,split,n_examples,n_empty_predictions,n_truncated,DER_ce_corr,DER_noce_corr,WER_ce_corr,WER_noce_corr,DER_ce,DER_noce,WER_ce,WER_noce,skeleton_mismatch_rate
+/scratch/runs/qwen3.5-0.8b-lora-r16-eb96-contract-v1/checkpoint-1200,best,best_benchmark_sadeeddiac25_pooled,1200,0,0,12.77,12.89,18.79,14.14,10.66,9.8,16.41,11.62,42.0
+/scratch/runs/qwen3.5-0.8b-lora-r16-eb96-contract-v1/checkpoint-1200,best,best_benchmark_sadeeddiac25_CA,600,0,0,3.48,2.83,8.96,4.92,4.05,3.09,8.77,4.72,5.83
+/scratch/runs/qwen3.5-0.8b-lora-r16-eb96-contract-v1/checkpoint-1200,best,best_benchmark_sadeeddiac25_MSA,600,0,0,18.94,19.22,26.53,21.4,15.6,14.62,22.73,17.32,78.17
+/scratch/runs/qwen3.5-0.8b-lora-r16-eb96-contract-v1/checkpoint-1200,best,best_benchmark_sadeeddiac25_MACRO_MEAN,1200,0,0,11.21,11.02,17.75,13.16,9.82,8.86,15.75,11.02,42.0
